@@ -26,13 +26,6 @@ with open('calls.csv', 'r') as f:
 电话号码不能重复，每行打印一条，按字典顺序排序后输出。
 """
 
-def is_saler_phone(phone):
-    """判断是否是电话促销员的号码
-    :param phone: 电话号码,字符串
-    :return: True:是电话促销员,False:不是
-    """
-    return str(phone).startswith("140")
-
 def all_text_and_receive_phone():
     """找出所有发送和接收过短信，接过电话的号码"""
     phones = set()
@@ -49,7 +42,7 @@ def get_saller_phones():
     maybe_saller_phones = set()
     for call in calls:
         from_call = call[0]
-        if is_saler_phone(from_call) and from_call not in maybe_not_saller_phones: # 号码以140开头且没有发送/接收过短信，没有接过电话
+        if from_call not in maybe_not_saller_phones: # 号码以140开头且没有发送/接收过短信，没有接过电话
             maybe_saller_phones.add(from_call)
     maybe_saller_phones_list = list(maybe_saller_phones)
     maybe_saller_phones_list.sort()

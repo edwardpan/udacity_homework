@@ -111,15 +111,15 @@ for phone in phones:
 
 def find_rate():
     """计算由班加罗尔固话打往班加罗尔固话在班加罗尔固话打出的所有号码中所占比例"""
-    bangalore_phone = set()
-    total_phone = set()
+    bangalore_phone = []
+    total_phone = []
     for call in calls:
         from_phone = call[0]
         to_phone = call[1]
         if is_bangalore_phone(from_phone): # 主叫号码是班加罗尔地区
-            total_phone.add(to_phone)
+            total_phone.append(to_phone)
             if is_bangalore_phone(to_phone): # 被叫号码是班加罗尔地区
-                bangalore_phone.add(to_phone)
+                bangalore_phone.append(to_phone)
     return round(len(bangalore_phone) / len(total_phone) * 100, 2)
 
 print("{} percent of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore."
