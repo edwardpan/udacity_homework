@@ -6,6 +6,8 @@ getcontext().prec = 30
 
 class Vector(object):
     CANNOT_NORMALIZED_ZERO_VECTOR_MSG = "Cannot normalized the zero vector"
+    NO_UNIQUE_PARALLEL_COMPONENT_MSG = "No unique parallel component"
+    NO_UNIQUE_ORTHOGONAL_COMPONENT_MSG = "No unique orthogonal component"
 
     def __init__(self, coordinates):
         try:
@@ -87,6 +89,29 @@ class Vector(object):
     def is_zero(self, tolerance=1e-10):
         """向量的单位向量是否为0"""
         return self.magnitude() < tolerance
+
+    def component_orthogonal_to(self, basis):
+        """计算垂直向量"""
+        try:
+            projection = self.component_parallel_to(basis)
+            return self.minus(projection)
+        except Exception as e:
+            if str(e) == self.NO_UNIQUE_PARALLEL_COMPONENT_MSG:
+                raise Exception(self.NO_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
+            else:
+                raise e
+
+    def component_parallel_to(self, basis):
+        """计算向量投影"""
+        try:
+            u = basis.normalized()
+            weight = self.dot(u)
+            return u.times_scalar(weight)
+        except Exception as e:
+            if str(e) == self.CANNOT_NORMALIZED_ZERO_VECTOR_MSG:
+                raise Exception(self.NO_UNIQUE_PARALLEL_COMPONENT_MSG)
+            else:
+                raise e
 
     def __str__(self):
         return "Vector: {}".format(self.coordinates)
