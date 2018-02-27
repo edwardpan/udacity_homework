@@ -39,11 +39,11 @@ class Line(object):
                 raise e
 
     def is_parallel(self, l):
-        """ÅĞ¶ÏÖ±ÏßÊÇ·ñÆ½ĞĞ"""
+        """åˆ¤æ–­ç›´çº¿æ˜¯å¦å¹³è¡Œ"""
         return self.normal_vector.is_parallel_to(l.normal_vector)
 
     def is_equals(self, l):
-        """ÅĞ¶ÏÖ±ÏßÊÇ·ñÏàµÈ£¨ÖØºÏ£©"""
+        """åˆ¤æ–­ç›´çº¿æ˜¯å¦ç›¸ç­‰ï¼ˆé‡åˆï¼‰"""
         if not self.is_parallel(l):
             return False
         # TODO
@@ -51,7 +51,7 @@ class Line(object):
         return True
 
     def get_x_point(self, l):
-        """ÕÒµ½Á½ÌõÖ±ÏßµÄ½»µã"""
+        """æ‰¾åˆ°ä¸¤æ¡ç›´çº¿çš„äº¤ç‚¹"""
         if self.is_parallel(l):
             raise Exception("Two line is parallel, no x point")
         x = (l.normal_vector(1) * self.constant_term - self.normal_vector(1) * l.constant_term) / (self.normal_vector(0) * l.normal_vector(1) - self.normal_vector(1) * l.normal_vector(0))
