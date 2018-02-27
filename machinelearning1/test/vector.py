@@ -8,6 +8,7 @@ class Vector(object):
     CANNOT_NORMALIZED_ZERO_VECTOR_MSG = "Cannot normalized the zero vector"
     NO_UNIQUE_PARALLEL_COMPONENT_MSG = "No unique parallel component"
     NO_UNIQUE_ORTHOGONAL_COMPONENT_MSG = "No unique orthogonal component"
+    CANNOT_MULTIPLY_ON_MORE_THAN_THREE_DIMENTION = "cannot multiply on more than three dimention"
 
     def __init__(self, coordinates):
         try:
@@ -44,14 +45,13 @@ class Vector(object):
         """计算向量方向（单位向量）"""
         try:
             magnitude = self.magnitude()
-            return self.times_scalar(Decimal("1.0")/magnitude)
+            return self.times_scalar(Decimal("1.0") / Decimal(magnitude))
         except ZeroDivisionError:
             raise Exception(self.CANNOT_NORMALIZED_ZERO_VECTOR_MSG)
 
     def dot(self, v):
         """计算向量点积"""
         n = [x*y for x, y in zip(self.coordinates, v.coordinates)]
-        print(n)
         return sum(n)
 
     def angle_with(self, v, in_degrees=False):
@@ -91,7 +91,7 @@ class Vector(object):
         return self.magnitude() < tolerance
 
     def component_orthogonal_to(self, basis):
-        """计算垂直向量"""
+        """计算该向量在给定向量上的垂直向量"""
         try:
             projection = self.component_parallel_to(basis)
             return self.minus(projection)
@@ -102,7 +102,7 @@ class Vector(object):
                 raise e
 
     def component_parallel_to(self, basis):
-        """计算向量投影"""
+        """计算该向量在给定向量上的投影"""
         try:
             u = basis.normalized()
             weight = self.dot(u)
@@ -113,13 +113,22 @@ class Vector(object):
             else:
                 raise e
 
+    def multiply(self, w):
+        """计算向量乘积"""
+        if len(self.coordinates) > 3 or len(w.coordinates) > 3:
+            raise Exception(self.CANNOT_MULTIPLY_ON_MORE_THAN_THREE_DIMENTION)
+        return Vector([self.coordinates[1]*w.coordinates[2] - w.coordinates[1]*self.coordinates[2],
+                 -(self.coordinates[0]*w.coordinates[2] - w.coordinates[0]*self.coordinates[2]),
+                 self.coordinates[0]*w.coordinates[1] - w.coordinates[0]*self.coordinates[1]])
+
     def __str__(self):
         return "Vector: {}".format(self.coordinates)
 
     def __eq__(self, v):
         return self.coordinates == v.coordinates
 
+
 if __name__ == "__main__":
-    print(Vector([-2.029, 9.97, 4.172]).dot(Vector([-9.231, -6.639, -7.245])))
-    print(Vector([-2.328, -7.284, -1.214]).dot(Vector([-1.821, 1.072, -2.94])))
-    print(4.239288-7.808448+3.56916)
+    print("v * w: {}".format(Vector([8.462, 7.893, -8.187]).multiply(Vector([6.984, -5.975, 4.778]))))
+    print("area of parallelogram: {}".format(Vector([-8.987, -9.838, 5.031]).multiply(Vector([-4.268, -1.861, -8.866])).magnitude()))
+    print("area of triangle: {}".format(Vector([1.5, 9.547, 3.691]).multiply(Vector([-6.007, 0.124, 5.772])).magnitude() / 2))
