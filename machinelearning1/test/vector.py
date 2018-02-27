@@ -118,8 +118,11 @@ class Vector(object):
         if len(self.coordinates) > 3 or len(w.coordinates) > 3:
             raise Exception(self.CANNOT_MULTIPLY_ON_MORE_THAN_THREE_DIMENTION)
         return Vector([self.coordinates[1]*w.coordinates[2] - w.coordinates[1]*self.coordinates[2],
-                 -(self.coordinates[0]*w.coordinates[2] - w.coordinates[0]*self.coordinates[2]),
-                 self.coordinates[0]*w.coordinates[1] - w.coordinates[0]*self.coordinates[1]])
+                       -(self.coordinates[0]*w.coordinates[2] - w.coordinates[0]*self.coordinates[2]),
+                       self.coordinates[0]*w.coordinates[1] - w.coordinates[0]*self.coordinates[1]])
+
+    def __getitem__(self, i):
+        return self.coordinates[i]
 
     def __str__(self):
         return "Vector: {}".format(self.coordinates)

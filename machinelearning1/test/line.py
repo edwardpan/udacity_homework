@@ -11,7 +11,7 @@ class Line(object):
         self.dimension = 2
 
         if not normal_vector:
-            all_zeros = ["0"]*self.dimension
+            all_zeros = ["0"] * self.dimension
             normal_vector = Vector(all_zeros)
         self.normal_vector = normal_vector
 
@@ -25,18 +25,38 @@ class Line(object):
         try:
             n = self.normal_vector
             c = self.constant_term
-            basepoint_coords = ['0']*self.dimension
+            basepoint_coords = ['0'] * self.dimension
 
             initial_index = Line.first_nonzero_index(n)
             initial_coefficient = n[initial_index]
 
-            basepoint_coords[initial_index] = c/initial_coefficient
+            basepoint_coords[initial_index] = c / initial_coefficient
             self.basepoint = Vector(basepoint_coords)
         except Exception as e:
             if str(e) == Line.NO_NONZERO_ELTS_FOUND_MSG:
                 self.basepoint = None
             else:
                 raise e
+
+    def is_parallel(self, l):
+        """判断直线是否平行"""
+        return self.normal_vector.is_parallel_to(l.normal_vector)
+
+    def is_equals(self, l):
+        """判断直线是否相等（重合）"""
+        if not self.is_parallel(l):
+            return False
+        # TODO
+
+        return True
+
+    def get_x_point(self, l):
+        """找到两条直线的交点"""
+        if self.is_parallel(l):
+            raise Exception("Two line is parallel, no x point")
+        x = (l.normal_vector(1) * self.constant_term - self.normal_vector(1) * l.constant_term) / (self.normal_vector(0) * l.normal_vector(1) - self.normal_vector(1) * l.normal_vector(0))
+        y = (-l.normal_vector(0) * self.constant_term + self.normal_vector(0) * l.constant_term) / (self.normal_vector(0) * l.normal_vector(1) - self.normal_vector(1) * l.normal_vector(0))
+        return Vector([x, y])
 
     def __str__(self):
         num_decimal_places = 3
@@ -89,3 +109,11 @@ class Line(object):
 class MyDecimal(Decimal):
     def is_near_zero(self, eps=1e-10):
         return abs(self) < eps
+
+
+if __name__ == "__main__":
+    line1 = Line(Vector([2, 3]), 1)
+    line2 = Line(Vector([4, 4]), 1)
+    # print(line1.is_parallel(line2))
+    # print(line1.get_normal_value(0))
+    print(line1.get_x_point(line2))
