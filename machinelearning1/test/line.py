@@ -38,25 +38,46 @@ class Line(object):
             else:
                 raise e
 
-    def is_parallel(self, l):
+    def is_parallel_to(self, ell):
         """判断直线是否平行"""
-        return self.normal_vector.is_parallel_to(l.normal_vector)
+        return self.normal_vector.is_parallel_to(ell.normal_vector)
 
-    def is_equals(self, l):
+    def __eq__(self, ell):
         """判断直线是否相等（重合）"""
-        if not self.is_parallel(l):
+        if self.normal_vector.is_zero():
+            if not ell.normal_vector.is_zero():
+                return False
+            else:
+                diff = self.constant_term - ell.constant_term
+                return MyDecimal(diff).is_near_zero()
+        elif ell.normal_vector.is_zero():
             return False
-        # TODO
+        if not self.is_parallel_to(ell):
+            return False
+        x0 = self.basepoint
+        y0 = ell.basepoint
+        basepoint_difference = x0.minus(y0)
 
-        return True
+        n = self.normal_vector
+        return basepoint_difference.is_orthogonal_to(n)
 
-    def get_x_point(self, l):
+    def intersection_with(self, ell):
         """找到两条直线的交点"""
-        if self.is_parallel(l):
-            raise Exception("Two line is parallel, no x point")
-        x = (l.normal_vector(1) * self.constant_term - self.normal_vector(1) * l.constant_term) / (self.normal_vector(0) * l.normal_vector(1) - self.normal_vector(1) * l.normal_vector(0))
-        y = (-l.normal_vector(0) * self.constant_term + self.normal_vector(0) * l.constant_term) / (self.normal_vector(0) * l.normal_vector(1) - self.normal_vector(1) * l.normal_vector(0))
-        return Vector([x, y])
+        try:
+            A, B = self.normal_vector.coordinates
+            C, D = ell.normal_vector.coordinates
+            k1 = self.constant_term
+            k2 = ell.constant_term
+
+            x_numerator = D*k1 - B*k2
+            y_numerator = -C*k1 + A*k2
+            one_over_denom = Decimal("1")/(A*D - B*C)
+            return Vector([x_numerator, y_numerator]).times_scalar(one_over_denom)
+        except ZeroDivisionError:
+            if self == ell:
+                return self
+            else:
+                return None
 
     def __str__(self):
         num_decimal_places = 3
@@ -112,8 +133,12 @@ class MyDecimal(Decimal):
 
 
 if __name__ == "__main__":
-    line1 = Line(Vector([2, 3]), 1)
-    line2 = Line(Vector([4, 4]), 1)
-    # print(line1.is_parallel(line2))
-    # print(line1.get_normal_value(0))
-    print(line1.get_x_point(line2))
+    line1 = Line(Vector(["4.046", "2.836"]), "1.21")
+    line2 = Line(Vector(["10.115", "7.09"]), "3.025")
+    print(line1.intersection_with(line2))
+    line1 = Line(Vector(["7.204", "3.182"]), "8.68")
+    line2 = Line(Vector(["8.172", "4.114"]), "9.883")
+    print(line1.intersection_with(line2))
+    line1 = Line(Vector(["1.182", "5.562"]), "6.744")
+    line2 = Line(Vector(["1.773", "8.343"]), "9.525")
+    print(line1.intersection_with(line2))
