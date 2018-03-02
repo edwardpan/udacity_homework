@@ -38,7 +38,7 @@ class Vector(object):
 
     def magnitude(self):
         """计算向量大小"""
-        coordinates_squared = [x**2 for x in self.coordinates]
+        coordinates_squared = [x**Decimal(2) for x in self.coordinates]
         return math.sqrt(sum(coordinates_squared))
 
     def normalized(self):
@@ -63,7 +63,7 @@ class Vector(object):
         try:
             u1 = self.normalized()
             u2 = v.normalized()
-            angle_in_radians = math.acos(u1.dot(u2))
+            angle_in_radians = math.acos(round(u1.dot(u2), 10))
             if in_degrees:
                 degrees_per_radian = 180. / math.pi
                 return angle_in_radians * degrees_per_radian
