@@ -2,7 +2,7 @@ from decimal import Decimal, getcontext
 from copy import deepcopy
 
 from machinelearning1.P4Learn.vector import Vector
-from machinelearning1.P4Learn.plane import Plane
+from machinelearning1.P4Learn.hyperplane import Hyperplane
 
 getcontext().prec = 30
 
@@ -102,7 +102,7 @@ class LinearSystem(object):
         k = self[row].constant_term
         new_normal_vector = n.times_scalar(coefficient)
         new_constant_term = k * coefficient
-        self[row] = Plane(normal_vector=new_normal_vector, constant_term=new_constant_term)
+        self[row] = Hyperplane(normal_vector=new_normal_vector, constant_term=new_constant_term)
 
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
         """将其中一个方程式等式两边乘以相同系数后加到另一个方程式（等式两边同时相加）"""
@@ -113,7 +113,7 @@ class LinearSystem(object):
 
         new_normal_vector = n1.times_scalar(coefficient).plus(n2)
         new_constant_term = (k1 * coefficient) + k2
-        self.planes[row_to_be_added_to] = Plane(normal_vector=new_normal_vector, constant_term=new_constant_term)
+        self.planes[row_to_be_added_to] = Hyperplane(normal_vector=new_normal_vector, constant_term=new_constant_term)
 
     def indices_of_first_nonzero_terms_in_each_row(self):
         """找到每一行方程首变量的索引列表"""
@@ -124,7 +124,7 @@ class LinearSystem(object):
             try:
                 indices[i] = p.first_nonzero_index(p.normal_vector)
             except Exception as e:
-                if str(e) == Plane.NO_NONZERO_ELTS_FOUND_MSG:
+                if str(e) == Hyperplane.NO_NONZERO_ELTS_FOUND_MSG:
                     continue
                 else:
                     raise e
@@ -248,29 +248,33 @@ class Parametrization(object):
             s = "x{} = ".format(i+1)
             s += str(round(self.basepoint[i], num_decimal_places))
             for j, direction in enumerate(self.direction_vectors):
-                s += " + {}t{}".format(round(direction[i], num_decimal_places), j+1)
+                c = round(direction[i], num_decimal_places)
+                if c == 0:
+                    continue
+                s += " + {}t{}".format(c, j+1)
             temp.append(s)
         ret = "\n".join(temp)
         return ret
 
 if __name__ == "__main__":
-    p1 = Plane(normal_vector=Vector(['0.786', '0.786', '0.588']), constant_term='-0.714')
-    p2 = Plane(normal_vector=Vector(['-0.138', '-0.138', '0.244']), constant_term='0.319')
+    p1 = Hyperplane(normal_vector=Vector(['0.786', '0.786']), constant_term='-0.714')
+    p2 = Hyperplane(normal_vector=Vector(['-0.138', '-0.138']), constant_term='0.319')
+    print(p1.is_parallel_to(p2))
     s = LinearSystem([p1, p2])
     r = s.compute_solution()
     print(r)
 
-    p1 = Plane(normal_vector=Vector(['8.631', '5.112', '-1.816']), constant_term='-5.113')
-    p2 = Plane(normal_vector=Vector(['4.315', '11.132', '-5.27']), constant_term='-6.775')
-    p3 = Plane(normal_vector=Vector(['-2.158', '3.01', '-1.727']), constant_term='-0.831')
+    p1 = Hyperplane(normal_vector=Vector(['8.631', '5.112', '-1.816']), constant_term='-5.113')
+    p2 = Hyperplane(normal_vector=Vector(['4.315', '11.132', '-5.27']), constant_term='-6.775')
+    p3 = Hyperplane(normal_vector=Vector(['-2.158', '3.01', '-1.727']), constant_term='-0.831')
     s = LinearSystem([p1, p2, p3])
     r = s.compute_solution()
     print(r)
 
-    p1 = Plane(normal_vector=Vector(['0.935', '1.76', '-9.365']), constant_term='-9.955')
-    p2 = Plane(normal_vector=Vector(['0.187', '0.352', '-1.873']), constant_term='-1.991')
-    p3 = Plane(normal_vector=Vector(['0.374', '0.704', '-3.746']), constant_term='-3.982')
-    p4 = Plane(normal_vector=Vector(['-0.561', '-1.056', '5.619']), constant_term='5.973')
+    p1 = Hyperplane(normal_vector=Vector(['0.935', '1.76', '-9.365', '1.23']), constant_term='-9.955')
+    p2 = Hyperplane(normal_vector=Vector(['0.187', '0.352', '-1.873', '-5.124']), constant_term='-1.991')
+    p3 = Hyperplane(normal_vector=Vector(['0.374', '0.704', '-3.746', '-1.0']), constant_term='-3.982')
+    p4 = Hyperplane(normal_vector=Vector(['-0.561', '-1.056', '5.619', '8.727']), constant_term='5.973')
     s = LinearSystem([p1, p2, p3, p4])
     r = s.compute_solution()
     print(r)
