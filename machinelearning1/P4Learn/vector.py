@@ -8,14 +8,14 @@ class Vector(object):
     CANNOT_NORMALIZED_ZERO_VECTOR_MSG = "Cannot normalized the zero vector"
     NO_UNIQUE_PARALLEL_COMPONENT_MSG = "No unique parallel component"
     NO_UNIQUE_ORTHOGONAL_COMPONENT_MSG = "No unique orthogonal component"
-    CANNOT_MULTIPLY_ON_MORE_THAN_THREE_DIMENTION = "cannot multiply on more than three dimention"
+    CANNOT_MULTIPLY_ON_MORE_THAN_THREE_DIMENTION = "cannot multiply on more than three dimension"
 
     def __init__(self, coordinates):
         try:
             if not coordinates:
                 raise ValueError
             self.coordinates = tuple([Decimal(x) for x in coordinates])
-            self.dimention = len(coordinates)
+            self.dimension = len(coordinates)
         except ValueError:
             raise ValueError("The coordinates must be nonempty")
         except TypeError:
