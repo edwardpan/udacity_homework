@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 # 任意选一个你喜欢的整数，这能帮你得到稳定的结果
@@ -20,7 +20,7 @@ seed = 5238
 # 
 # ## 1.1 创建一个 4*4 的单位矩阵
 
-# In[2]:
+# In[3]:
 
 
 # 这个项目设计来帮你熟悉 python list 和线性代数
@@ -42,15 +42,15 @@ C = [[1],
      [3]]
 
 #TODO 创建一个 4*4 单位矩阵
-I = [[1,2,3,4],
-     [2,3,4,5],
-     [3,4,5,6],
-     [4,5,6,7]]
+I = [[1,0,0,0],
+     [0,1,0,0],
+     [0,0,1,0],
+     [0,0,0,1]]
 
 
 # ## 1.2 返回矩阵的行数和列数
 
-# In[3]:
+# In[4]:
 
 
 # TODO 返回矩阵的行数和列数
@@ -60,16 +60,16 @@ def shape(M):
     return r,c
 
 
-# In[4]:
+# In[5]:
 
 
 # 运行以下代码测试你的 shape 函数
-get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test_shape')
+get_ipython().magic('run -i -e test.py LinearRegressionTestCase.test_shape')
 
 
 # ## 1.3 每个元素四舍五入到特定小数数位
 
-# In[5]:
+# In[6]:
 
 
 # TODO 每个元素四舍五入到特定小数数位
@@ -80,16 +80,16 @@ def matxRound(M, decPts=4):
             M[i][j] = round(M[i][j], decPts)
 
 
-# In[6]:
+# In[7]:
 
 
 # 运行以下代码测试你的 matxRound 函数
-get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test_matxRound')
+get_ipython().magic('run -i -e test.py LinearRegressionTestCase.test_matxRound')
 
 
 # ## 1.4 计算矩阵的转置
 
-# In[7]:
+# In[8]:
 
 
 # TODO 计算矩阵的转置
@@ -105,16 +105,16 @@ def transpose(M):
     return N
 
 
-# In[8]:
+# In[9]:
 
 
 # 运行以下代码测试你的 transpose 函数
-get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test_transpose')
+get_ipython().magic('run -i -e test.py LinearRegressionTestCase.test_transpose')
 
 
 # ## 1.5 计算矩阵乘法 AB
 
-# In[9]:
+# In[10]:
 
 
 # TODO 计算矩阵乘法 AB，如果无法相乘则raise ValueError
@@ -135,11 +135,11 @@ def matxMultiply(A, B):
     return N
 
 
-# In[10]:
+# In[11]:
 
 
 # 运行以下代码测试你的 matxMultiply 函数
-get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test_matxMultiply')
+get_ipython().magic('run -i -e test.py LinearRegressionTestCase.test_matxMultiply')
 
 
 # ---
@@ -169,7 +169,7 @@ get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test
 #     ...    & ... & ... & ...& ...\\
 #     a_{n1}    & a_{n2} & ... & a_{nn} & b_{n} \end{bmatrix}$
 
-# In[11]:
+# In[12]:
 
 
 # TODO 构造增广矩阵，假设A，b行数相同
@@ -188,11 +188,11 @@ def augmentMatrix(A, b):
     return N
 
 
-# In[12]:
+# In[13]:
 
 
 # 运行以下代码测试你的 augmentMatrix 函数
-get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test_augmentMatrix')
+get_ipython().magic('run -i -e test.py LinearRegressionTestCase.test_augmentMatrix')
 
 
 # ## 2.2 初等行变换
@@ -200,7 +200,7 @@ get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test
 # - 把某行乘以一个非零常数
 # - 把某行加上另一行的若干倍：
 
-# In[13]:
+# In[14]:
 
 
 # TODO r1 <---> r2
@@ -209,14 +209,14 @@ def swapRows(M, r1, r2):
     M[r1], M[r2] = M[r2], M[r1]
 
 
-# In[14]:
+# In[15]:
 
 
 # 运行以下代码测试你的 swapRows 函数
-get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test_swapRows')
+get_ipython().magic('run -i -e test.py LinearRegressionTestCase.test_swapRows')
 
 
-# In[15]:
+# In[16]:
 
 
 # TODO r1 <--- r1 * scale
@@ -228,14 +228,14 @@ def scaleRow(M, r, scale):
     M[r] = [x * scale for x in M[r]]
 
 
-# In[16]:
+# In[17]:
 
 
 # 运行以下代码测试你的 scaleRow 函数
-get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test_scaleRow')
+get_ipython().magic('run -i -e test.py LinearRegressionTestCase.test_scaleRow')
 
 
-# In[17]:
+# In[18]:
 
 
 # TODO r1 <--- r1 + r2*scale
@@ -245,11 +245,11 @@ def addScaledRow(M, r1, r2, scale):
     M[r1] = [x + y for x, y in zip(M[r1], temp)]
 
 
-# In[18]:
+# In[19]:
 
 
 # 运行以下代码测试你的 addScaledRow 函数
-get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test_addScaledRow')
+get_ipython().magic('run -i -e test.py LinearRegressionTestCase.test_addScaledRow')
 
 
 # ## 2.3  Gaussian Jordan 消元法求解 Ax = b
@@ -318,7 +318,7 @@ get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test
 
 # #### 以下开始你的尝试吧!
 
-# In[19]:
+# In[20]:
 
 
 # 不要修改这里！
@@ -339,16 +339,20 @@ printInMatrixFormat(Ab,padding=3,truncating=0)
 #  - $\frac{n}{m}$
 #  - $-\frac{a}{b}$
 # 
-# 
 # $ Ab = \begin{bmatrix}
-#     1 & -\frac{7}{3} & 2 & \frac{1}{3} \\
 #     0 & 5 & -3 & 1 \\
-#     0 & -\frac{31}{3} & 18 & \frac{10}{3} \end{bmatrix}$
+#     3 & -7 & 6 & 1 \\
+#     -7 & 6 & 4 & 1 \end{bmatrix}$
 # 
 # $ --> \begin{bmatrix}
-#     1 & 0 & \frac{3}{5} & \frac{12}{15} \\
+#     1 & -\frac{6}{7} & -\frac{4}{7} & -\frac{1}{7} \\
+#     0 & -\frac{31}{7} & \frac{54}{7} & \frac{10}{7} \\
+#     0 & 5 & -3 & 1 \end{bmatrix}$
+# 
+# $ --> \begin{bmatrix}
+#     1 & 0 & -\frac{38}{35} & \frac{1}{35} \\
 #     0 & 1 & -\frac{3}{5} & \frac{1}{5} \\
-#     0 & 0 & \frac{59}{5} & \frac{27}{5} \end{bmatrix}$
+#     0 & 0 & \frac{177}{35} & \frac{81}{35} \end{bmatrix}$
 #     
 # $ --> \begin{bmatrix}
 #     1 & 0 & 0 & \frac{31}{59} \\
@@ -450,7 +454,7 @@ def gj_Solve(A, b, decPts=4, epsilon = 1.0e-16):
 
 
 # 运行以下代码测试你的 gj_Solve 函数
-get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test_gj_Solve')
+get_ipython().magic('run -i -e test.py LinearRegressionTestCase.test_gj_Solve')
 
 
 # ## (选做) 2.4 算法正确判断了奇异矩阵：
@@ -488,7 +492,7 @@ get_ipython().run_line_magic('run', '-i -e test.py LinearRegressionTestCase.test
 # 运行一次就够了！
 from helper import *
 from matplotlib import pyplot as plt
-get_ipython().run_line_magic('matplotlib', 'inline')
+get_ipython().magic('matplotlib inline')
 
 X,Y = generatePoints(seed,num=100)
 
