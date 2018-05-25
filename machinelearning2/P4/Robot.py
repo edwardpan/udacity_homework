@@ -48,8 +48,8 @@ class Robot(object):
             self.epsilon = 1
         else:
             # 2. Update parameters when learning
-            self.epsilon = math.pow(self.epsilon0, 1 + 0.002 * self.t)
-            # self.alpha = math.pow(self.alpha0, 0.01 * self.t)
+            # self.epsilon = math.pow(self.epsilon0, 1 + 0.002 * self.t)
+            self.epsilon = self.epsilon0 * math.pow(0.99, self.t)
         return self.epsilon
 
     def sense_state(self):
@@ -79,25 +79,24 @@ class Robot(object):
             # 5. Return whether do random choice
             # hint: generate a random number, and compare
             # it with epsilon
-            return random.uniform(0, 1) < self.epsilon
+            return random.random() < self.epsilon
 
         if self.learning:
             if is_random_exploration():
                 # 6. Return random choose aciton
-                actionIndex = int(random.uniform(0, 4))
-                return self.valid_actions[actionIndex]
+                return random.choice(self.valid_actions)
             else:
                 # 7. Return action with highest q value
                 state_q = self.Qtable[self.state]
-                return max(state_q, key=lambda k: state_q[k])
+                return max(state_q, key=state_q.get)
         elif self.testing:
             # 7. choose action with highest q value
             state_q = self.Qtable[self.state]
-            return max(state_q, key=lambda k: state_q[k])
+            return max(state_q, key=state_q.get)
         else:
             # 6. Return random choose aciton
             actionIndex = int(random.uniform(0, 4))
-            return self.valid_actions[actionIndex]
+            return random.choice(self.valid_actions)
 
     def update_Qtable(self, r, action, next_state):
         """
@@ -107,9 +106,7 @@ class Robot(object):
             # 8. When learning, update the q table according
             # to the given rules
             # 目的地的最大Q值
-            next_state_q = self.Qtable[next_state]
-            next_state_max_action = max(next_state_q, key=lambda k: next_state_q[k])
-            next_state_max_q = next_state_q[next_state_max_action]
+            next_state_max_q = max(self.Qtable[next_state].values())
             # 计算新的Q值
             old_q = self.Qtable[self.state][action]
             new_q = (1 - self.alpha) * old_q + self.alpha * (r + self.gamma * next_state_max_q)
