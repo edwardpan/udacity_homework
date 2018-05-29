@@ -83,7 +83,7 @@ def write_to_file():
     time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     log_file = 'aliyun_ddns_log.txt'
     with open(log_file, "a") as w:
-        w.write(time_now)
+        w.write(time_now + ' ' + str(rc_value) + '\n')
     return(True)
 
 # mail run parts
@@ -94,7 +94,7 @@ if __name__ == '__main__':
 
     # 获取当前IP
     rc_value = my_ip()
-    # rc_value = "115.238.190.238"
+    # rc_value = "115.238.190.231"
     # 获取当前DNS记录值
     rc_value_old = old_ip()
     # 如果当前IP与DNS记录值一致, 则不更新记录
