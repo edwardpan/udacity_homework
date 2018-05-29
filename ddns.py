@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: UTF-8 -*-
 # 请使用Python2.X来执行此脚本
 import json
