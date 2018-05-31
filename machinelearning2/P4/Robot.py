@@ -49,7 +49,8 @@ class Robot(object):
         else:
             # 2. Update parameters when learning
             # self.epsilon = math.pow(self.epsilon0, 1 + 0.002 * self.t)
-            self.epsilon = self.epsilon0 * math.pow(0.99, self.t)
+            # self.epsilon = self.epsilon0 * math.pow(0.99, self.t)
+            self.epsilon = self.epsilon0 * min(math.cos(self.t/200), 0)
         return self.epsilon
 
     def sense_state(self):
@@ -109,7 +110,12 @@ class Robot(object):
             next_state_max_q = max(self.Qtable[next_state].values())
             # 计算新的Q值
             old_q = self.Qtable[self.state][action]
-            new_q = (1 - self.alpha) * old_q + self.alpha * (r + self.gamma * next_state_max_q)
+            # 使用当前奖励与平常奖励做偏差比较决定学习的权重
+            abs_vs = [abs(v) for v in self.maze.reward.values()]
+            max_r = max(abs_vs)
+            min_r = min(abs_vs)
+            alpha = (abs(r) - min_r) / (max_r - min_r) * self.alpha + self.alpha
+            new_q = (1 - alpha) * old_q + alpha * (r + self.gamma * next_state_max_q)
             self.Qtable[self.state][action] = new_q
 
 
