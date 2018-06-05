@@ -27,7 +27,8 @@
 
 数据集中将图片数据分为了训练集和测试集，训练集可用于该项目中训练模型，测试集可在模型训练完毕后检验预测效果，可提交至Kaggle中计算已训练模型的最终得分。
 
-训练集中已将图像标记分类，分为c0到c9一共十个文件夹存放，共22424张图片。测试集中有79729张未标记分类的图片。
+训练集中已将图像标记分类，分为c0到c9一共十个文件夹存放，共22424张图片。测试集中有79729张未标记分类的图片。训练数据中司机状态分类呈均匀分布：
+![undefined](proposal_img/data.png)
 
 数据集中每一张图片大小为640*480像素。图片中的驾驶员各种各样，有胖有瘦，有高有矮，有男有女、甚至还有不同肤色的驾驶员，有的驾驶员手臂上还有纹身。图片的光线有明，也有暗，甚至还有些有点爆光过度，导致难以发现手中的透明杯子。
 1. 因光照原因看不见喝饮料的杯子  
@@ -39,9 +40,19 @@
 
 项目开始时将对训练集做分割，分割出实际训练集和验证集，训练集用于该项目中训练模型，验证集用于对训练出的模型作验证，检验模型的泛化能力。这里因为数据集中的司机图像是从视频中截取出来的，可能存在两张甚至多种几乎一样的图像分别位于训练集和验证集中。训练后做验证时因为验证集存在几乎相同的图像，会导致验证分数被提高，但实际上模型仅仅是记住了该图片，因此分割验证集里需要采用一些策略。
 
-通过分析数据集中提供的`driver_imgs_list.csv`文件发现，subject列中相同编码对应的图像是同一名司机，共有26名司机，且每一名司机都有c0到c9十种行为，为避免上诉问题出现，决定分割时分出2名指定司机的所有类别图像数据出来作为验证集。
+通过分析数据集中提供的`driver_imgs_list.csv`文件发现，subject列中相同编码对应的图像是同一名司机，共有26名司机，且每一名司机都有c0到c9十种行为，为避免上诉问题出现，在使用KFold分割数据时，分割为13组数据，每一组中有2名司机的图像数据作为验证集。
 ### 解决办法
-可使用多层次的卷积神经网络模型来提取出每一张训练图集中驾驶员的特征图，然后使用全连接层+softmax激活函数对特征图进行训练分类，训练出10种驾驶员状态。训练多次迭代，使用随机梯度下降优化法找到模型的最优参数，使损失函数降低到最优值。
+使用sklearn中的GroupKFold对数据集进行划分，划分时使用`subject`列中的数据作为分组依据，`img`列和`classname`列分别作为数据的特征和目标分类：
+```python
+drivers_pd = pd.read_csv("data/driver_imgs_list.csv")
+imgs_pd = drivers_pd["img"]
+class_pd = drivers_pd["classname"]
+subject_pd = drivers_pd["subject"]
+kfolds = group_kfold.split(imgs_pd, class_pd, subject_pd)
+for train_index, test_index in group_kfold.split(imgs_pd, class_pd, subject_pd):
+    print("TRAIN:", train_index, "TEST:", test_index)
+```
+可使用InceptionV3[1]和Xception[2]模型来训练数据集，使用imagenet的权重来初始化模型权重，尝试对两个模型进行fine-tune微调，在模型的最后增加一个全局平均池化层、一个全连接层，全连接层使用`softmax`激活函数进行分类，训练10种驾驶员状态。训练多次迭代，使用随机梯度下降优化法找到模型的最优参数，使损失函数降低到最优值。
 ### 基准模型
 使用Kaggle中该项目的排名分数做为基准模型。使用前10%的分数作为基准，第144名，最小损失值为0.25634。
 ### 评估指标
@@ -55,7 +66,9 @@ $$
 
 从`driver_imgs_list.csv`中的图像索引划分出训练集和验证集并通过数据表中的`classname`列获取训练集和验证集的目标标记。
 
-使用Keras搭建卷积神经网络结构，使用Xception模型对训练集进行训练并验证。每一次epoch都计算出训练集及验证集的损失值，同时使用优化器的训练历史数据绘制损失值折线图。
+分别尝试使用Keras中的预训练模型InceptionV3[1]和Xception[2]，对训练集进行训练并验证。每一次epoch计算出训练集及验证集的损失值，同时使用优化器的训练历史数据绘制损失值折线图，研究哪一个模型的效果最优。
 ## 参考资料
-[1]黄文坚. [CNN浅析和历年ImageNet冠军模型解析](http://www.infoq.com/cn/articles/cnn-and-imagenet-champion-model-analysis). 发表时间: 2017年5月22日.
-[2]François Chollet. [Xception: Deep Learning with Depthwise Separable Convolutions](https://arxiv.org/abs/1610.02357). arXiv preprint arXiv:1610.02357, 2016.
+[1]Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, Zbigniew Wojna. [
+Rethinking the Inception Architecture for Computer Vision](https://arxiv.org/abs/1512.00567). arXiv:1512.00567, 2015.
+[2]François Chollet. [Xception: Deep Learning with Depthwise Separable Convolutions](https://arxiv.org/abs/1610.02357). arXiv prepr int arXiv:1610.02357, 2016.
+[3]黄文坚. [CNN浅析和历年ImageNet冠军模型解析](http://www.infoq.com/cn/articles/cnn-and-imagenet-champion-model-analysis). 发表时间: 2017年5月22日.
