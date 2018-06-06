@@ -67,8 +67,8 @@ $$
 从`driver_imgs_list.csv`中的图像索引划分出训练集和验证集并通过数据表中的`classname`列获取训练集和验证集的目标标记。
 
 分别尝试使用Keras中的预训练模型InceptionV3[1]和Xception[2]，对训练集进行训练并验证。每一次epoch计算出训练集及验证集的损失值，同时使用优化器的训练历史数据绘制损失值折线图，研究哪一个模型的效果最优。
-## 参考资料
+## 参考文献
 [1]Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, Zbigniew Wojna. [
-Rethinking the Inception Architecture for Computer Vision](https://arxiv.org/abs/1512.00567). arXiv:1512.00567, 2015.
-[2]François Chollet. [Xception: Deep Learning with Depthwise Separable Convolutions](https://arxiv.org/abs/1610.02357). arXiv prepr int arXiv:1610.02357, 2016.
+Rethinking the Inception Architecture for Computer Vision](https://arxiv.org/pdf/1512.00567). arXiv:1512.00567, 2015.
+[2]François Chollet. [Xception: Deep Learning with Depthwise Separable Convolutions](https://arxiv.org/pdf/1610.02357). arXiv prepr int arXiv:1610.02357, 2016.
 [3]黄文坚. [CNN浅析和历年ImageNet冠军模型解析](http://www.infoq.com/cn/articles/cnn-and-imagenet-champion-model-analysis). 发表时间: 2017年5月22日.
