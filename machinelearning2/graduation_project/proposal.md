@@ -51,7 +51,7 @@ imgs_pd = drivers_pd["img"]
 class_pd = drivers_pd["classname"]
 subject_pd = drivers_pd["subject"]
 kfolds = group_kfold.split(imgs_pd, class_pd, subject_pd)
-for train_index, test_index in group_kfold.split(imgs_pd, class_pd, subject_pd):
+for train_index, test_index in kfolds:
     print("TRAIN:", train_index, "TEST:", test_index)
 ```
 可使用InceptionV3[1]和Xception[2]模型来训练数据集，使用imagenet的权重来初始化模型权重，尝试对两个模型进行fine-tune微调，在模型的最后增加一个全局平均池化层、一个全连接层，全连接层使用`softmax`激活函数进行分类，训练10种驾驶员状态。训练多次迭代，使用随机梯度下降优化法找到模型的最优参数，使损失函数降低到最优值。
