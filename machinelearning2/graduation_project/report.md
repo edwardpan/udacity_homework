@@ -72,9 +72,96 @@ $$
 数据的探索这一部分中提及的异常和特性是否被更正了，对此进行记录和描述了吗？
 如果你认为不需要进行预处理，你解释个中原因了吗？
 ### 执行过程
-项目开始时将对训练集做分割，分割出实际训练集和验证集，训练集用于该项目中训练模型，验证集用于对训练出的模型作验证，检验模型的泛化能力。这里因为数据集中的司机图像是从视频中截取出来的，可能存在两张甚至多种几乎一样的图像分别位于训练集和验证集中。训练后做验证时因为验证集存在几乎相同的图像，会导致验证分数被提高，但实际上模型仅仅是记住了该图片，因此分割验证集里需要采用一些策略。
+1. 第一次
+模型InceptionV3，自定义层
+```
+epochs = 50
 
-通过分析数据集中提供的`driver_imgs_list.csv`文件发现，subject列中相同编码对应的图像是同一名司机，共有26名司机，且每一名司机都有c0到c9十种行为，为避免上诉问题出现，在使用KFold分割数据时，分割为13组数据，每一组中有2名司机的图像数据作为验证集。
+x = GlobalAveragePooling2D()(x)
+x = Dense(1024, activation='relu')(x)
+predictions = Dense(10, activation='softmax')(x)
+```
+优化器：rmsprop
+```
+Found 20600 images belonging to 10 classes.
+Found 1824 images belonging to 10 classes.
+Epoch 1/50
+1287/1287 [==============================] - 300s 233ms/step - loss: 2.1878 - acc: 0.2330 - val_loss: 2.7654 - val_acc: 0.0976
+Epoch 2/50
+1287/1287 [==============================] - 210s 164ms/step - loss: 1.9474 - acc: 0.3159 - val_loss: 3.5307 - val_acc: 0.1738
+Epoch 3/50
+1287/1287 [==============================] - 210s 163ms/step - loss: 1.8856 - acc: 0.3398 - val_loss: 3.0451 - val_acc: 0.2149
+Epoch 4/50
+1287/1287 [==============================] - 210s 163ms/step - loss: 1.8405 - acc: 0.3580 - val_loss: 3.0962 - val_acc: 0.2056
+Epoch 5/50
+1287/1287 [==============================] - 209s 162ms/step - loss: 1.8213 - acc: 0.3696 - val_loss: 2.9592 - val_acc: 0.2484
+Epoch 6/50
+1287/1287 [==============================] - 209s 162ms/step - loss: 1.7888 - acc: 0.3828 - val_loss: 3.6558 - val_acc: 0.1798
+Epoch 7/50
+1287/1287 [==============================] - 209s 162ms/step - loss: 1.7549 - acc: 0.3995 - val_loss: 3.6679 - val_acc: 0.2111
+Epoch 8/50
+1287/1287 [==============================] - 209s 162ms/step - loss: 1.7304 - acc: 0.4079 - val_loss: 3.3764 - val_acc: 0.1859
+```
+损失值不降，反升
+2. 第二次
+模型InceptionV3，自定义层
+```
+epochs = 50
+
+x = GlobalAveragePooling2D()(x)
+x = Dense(1024, activation='relu')(x)
+predictions = Dense(10, activation='softmax')(x)
+```
+优化器：sgd
+```
+Found 20673 images belonging to 10 classes.
+Found 1751 images belonging to 10 classes.
+Epoch 1/50
+1292/1292 [==============================] - 354s 274ms/step - loss: 1.1084 - acc: 0.6081 - val_loss: 1.5150 - val_acc: 0.6061
+Epoch 2/50
+1292/1292 [==============================] - 321s 249ms/step - loss: 0.3817 - acc: 0.8723 - val_loss: 0.8985 - val_acc: 0.7288
+Epoch 3/50
+1292/1292 [==============================] - 321s 248ms/step - loss: 0.2513 - acc: 0.9178 - val_loss: 0.8782 - val_acc: 0.7403
+Epoch 4/50
+1292/1292 [==============================] - 321s 249ms/step - loss: 0.1990 - acc: 0.9365 - val_loss: 0.6606 - val_acc: 0.7987
+Epoch 5/50
+1292/1292 [==============================] - 321s 249ms/step - loss: 0.1610 - acc: 0.9491 - val_loss: 0.8641 - val_acc: 0.7620
+```
+模型有些过拟合
+3. 第三次
+```
+epochs = 50
+
+x = GlobalAveragePooling2D()(x)
+x = Dense(1024, activation='relu')(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+```
+优化器：sgd
+```
+Found 20714 images belonging to 10 classes.
+Found 1710 images belonging to 10 classes.
+Epoch 1/50
+1294/1294 [==============================] - 358s 277ms/step - loss: 1.2635 - acc: 0.5512 - val_loss: 0.9768 - val_acc: 0.6763
+Epoch 2/50
+1294/1294 [==============================] - 322s 249ms/step - loss: 0.4318 - acc: 0.8616 - val_loss: 0.6057 - val_acc: 0.8154
+Epoch 3/50
+1294/1294 [==============================] - 322s 249ms/step - loss: 0.2799 - acc: 0.9079 - val_loss: 0.8785 - val_acc: 0.7836
+Epoch 4/50
+1294/1294 [==============================] - 321s 248ms/step - loss: 0.2039 - acc: 0.9356 - val_loss: 0.6909 - val_acc: 0.7960
+```
+模型有些过拟合
+4. 第四次
+```
+epochs = 3
+
+x = GlobalAveragePooling2D()(x)
+x = Dense(1024, activation='relu')(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+```
+优化器：sgd
+
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
