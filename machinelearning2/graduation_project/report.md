@@ -151,16 +151,19 @@ Epoch 4/50
 1294/1294 [==============================] - 321s 248ms/step - loss: 0.2039 - acc: 0.9356 - val_loss: 0.6909 - val_acc: 0.7960
 ```
 模型有些过拟合
-4. 第四次
+4. 第四次，发现K折交叉验证理解错误，修改代码
 ```
-epochs = 3
+epochs = 50
 
 x = GlobalAveragePooling2D()(x)
 x = Dense(1024, activation='relu')(x)
 x = Dropout(0.5)(x)
 predictions = Dense(10, activation='softmax')(x)
 ```
-优化器：sgd
+优化器：sgd，设定优化器参数
+```
+sgd = SGD(lr=0.002, decay=1e-6, momentum=0.9, nesterov=True)
+```
 
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
