@@ -228,7 +228,122 @@ Epoch 5/10
 Epoch 6/10
 1298/1298 [==============================] - 905s 697ms/step - loss: 0.0664 - acc: 0.9812 - val_loss: 0.6797 - val_acc: 0.7659
 ```
+7. 第七次
+```
+epochs = 20
+batch_size=32
+out_image_size = (150, 150)
 
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+```
+```
+out_image_size = (150, 150)
+sgd = SGD(lr=0.0003, decay=1e-8, momentum=0.9, nesterov=True)
+```
+```
+Found 20841 images belonging to 10 classes.
+Found 1583 images belonging to 10 classes.
+model name: inceptionv3 , save weight file: saved_weights/inceptionv3_0.h5
+WARNING:tensorflow:Variable *= will be deprecated. Use variable.assign_mul if you want assignment to the variable value or 'x = x * y' if you want a new python Tensor object.
+Epoch 1/20
+651/651 [==============================] - 546s 839ms/step - loss: 2.1665 - acc: 0.2133 - val_loss: 1.7801 - val_acc: 0.3412
+Epoch 2/20
+651/651 [==============================] - 245s 377ms/step - loss: 1.2576 - acc: 0.5664 - val_loss: 1.2006 - val_acc: 0.5727
+Epoch 3/20
+651/651 [==============================] - 245s 377ms/step - loss: 0.6566 - acc: 0.7830 - val_loss: 1.2307 - val_acc: 0.6135
+Epoch 4/20
+651/651 [==============================] - 247s 380ms/step - loss: 0.4338 - acc: 0.8569 - val_loss: 1.6721 - val_acc: 0.5638
+Epoch 5/20
+651/651 [==============================] - 242s 372ms/step - loss: 0.3366 - acc: 0.8909 - val_loss: 1.7700 - val_acc: 0.5797
+```
+8. 第八次
+```
+epochs = 30
+batch_size=32
+out_image_size = (150, 150)
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+predictions = Dense(10, activation='softmax')(x)
+```
+```
+out_image_size = (150, 150)
+sgd = SGD(lr=0.0002, decay=1e-8, momentum=0.9, nesterov=True)
+```
+```
+Found 20600 images belonging to 10 classes.
+Found 1824 images belonging to 10 classes.
+model name: inceptionv3 , save weight file: saved_weights/inceptionv3_0.h5
+Epoch 1/30
+643/643 [==============================] - 254s 394ms/step - loss: 2.1295 - acc: 0.2329 - val_loss: 1.6416 - val_acc: 0.4172
+Epoch 2/30
+643/643 [==============================] - 244s 380ms/step - loss: 1.3747 - acc: 0.5371 - val_loss: 0.9983 - val_acc: 0.6305
+Epoch 3/30
+643/643 [==============================] - 244s 379ms/step - loss: 0.8124 - acc: 0.7381 - val_loss: 0.7881 - val_acc: 0.7138
+Epoch 4/30
+643/643 [==============================] - 246s 383ms/step - loss: 0.5515 - acc: 0.8263 - val_loss: 0.6987 - val_acc: 0.7374
+Epoch 5/30
+643/643 [==============================] - 245s 381ms/step - loss: 0.4126 - acc: 0.8685 - val_loss: 0.8456 - val_acc: 0.7029
+Epoch 6/30
+643/643 [==============================] - 248s 386ms/step - loss: 0.3444 - acc: 0.8889 - val_loss: 0.6771 - val_acc: 0.7604
+Epoch 7/30
+643/643 [==============================] - 246s 382ms/step - loss: 0.2870 - acc: 0.9088 - val_loss: 0.6297 - val_acc: 0.7708
+Epoch 8/30
+643/643 [==============================] - 243s 378ms/step - loss: 0.2459 - acc: 0.9217 - val_loss: 0.7042 - val_acc: 0.7659
+Epoch 9/30
+643/643 [==============================] - 244s 379ms/step - loss: 0.2144 - acc: 0.9334 - val_loss: 0.7639 - val_acc: 0.7582
+Epoch 10/30
+643/643 [==============================] - 245s 381ms/step - loss: 0.1944 - acc: 0.9385 - val_loss: 0.6920 - val_acc: 0.7692
+Epoch 11/30
+643/643 [==============================] - 242s 376ms/step - loss: 0.1781 - acc: 0.9439 - val_loss: 0.8613 - val_acc: 0.7560
+```
+9. 第九次
+```
+epochs = 30
+batch_size=32
+out_image_size = (150, 150)
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+predictions = Dense(10, activation='softmax')(x)
+```
+```
+out_image_size = (150, 150)
+sgd = SGD(lr=0.0001, decay=1e-8, momentum=0.9, nesterov=True)
+```
+```
+Found 20593 images belonging to 10 classes.
+Found 1831 images belonging to 10 classes.
+model name: inceptionv3 , save weight file: saved_weights/inceptionv3_0.h5
+Epoch 1/30
+643/643 [==============================] - 258s 401ms/step - loss: 2.2729 - acc: 0.1658 - val_loss: 1.9633 - val_acc: 0.3476
+Epoch 2/30
+643/643 [==============================] - 245s 382ms/step - loss: 1.9426 - acc: 0.3252 - val_loss: 1.6037 - val_acc: 0.4413
+Epoch 3/30
+643/643 [==============================] - 245s 382ms/step - loss: 1.5190 - acc: 0.4831 - val_loss: 1.3965 - val_acc: 0.4885
+Epoch 4/30
+643/643 [==============================] - 248s 386ms/step - loss: 1.1433 - acc: 0.6262 - val_loss: 1.3790 - val_acc: 0.5395
+Epoch 5/30
+643/643 [==============================] - 245s 380ms/step - loss: 0.8879 - acc: 0.7121 - val_loss: 1.1363 - val_acc: 0.6360
+Epoch 6/30
+643/643 [==============================] - 246s 382ms/step - loss: 0.7009 - acc: 0.7752 - val_loss: 1.1552 - val_acc: 0.6398
+Epoch 7/30
+643/643 [==============================] - 246s 382ms/step - loss: 0.5793 - acc: 0.8135 - val_loss: 1.0737 - val_acc: 0.6787
+Epoch 8/30
+643/643 [==============================] - 243s 378ms/step - loss: 0.4999 - acc: 0.8370 - val_loss: 1.0415 - val_acc: 0.6985
+Epoch 9/30
+643/643 [==============================] - 242s 376ms/step - loss: 0.4349 - acc: 0.8604 - val_loss: 1.0303 - val_acc: 0.7083
+Epoch 10/30
+643/643 [==============================] - 244s 380ms/step - loss: 0.3855 - acc: 0.8791 - val_loss: 0.9776 - val_acc: 0.7182
+Epoch 11/30
+643/643 [==============================] - 241s 375ms/step - loss: 0.3436 - acc: 0.8900 - val_loss: 1.0551 - val_acc: 0.7111
+Epoch 12/30
+643/643 [==============================] - 241s 375ms/step - loss: 0.3080 - acc: 0.9024 - val_loss: 0.9495 - val_acc: 0.7314
+Epoch 13/30
+643/643 [==============================] - 241s 374ms/step - loss: 0.2872 - acc: 0.9107 - val_loss: 0.9546 - val_acc: 0.7292
+```
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
