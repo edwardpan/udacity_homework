@@ -151,7 +151,7 @@ Epoch 4/50
 1294/1294 [==============================] - 321s 248ms/step - loss: 0.2039 - acc: 0.9356 - val_loss: 0.6909 - val_acc: 0.7960
 ```
 模型有些过拟合
-4. 第四次，发现K折交叉验证理解错误，修改代码
+4. 第四次
 ```
 epochs = 50
 
@@ -162,7 +162,71 @@ predictions = Dense(10, activation='softmax')(x)
 ```
 优化器：sgd，设定优化器参数
 ```
-sgd = SGD(lr=0.002, decay=1e-6, momentum=0.9, nesterov=True)
+out_image_size = (150, 150)
+
+sgd = SGD(lr=0.0001, decay=1e-8, momentum=0.9, nesterov=True)
+```
+```
+Found 20665 images belonging to 10 classes.
+Found 1759 images belonging to 10 classes.
+model name: inceptionv3 , save weight file: inceptionv3_0.h5
+Epoch 1/50
+1291/1291 [==============================] - 341s 264ms/step - loss: 2.2996 - acc: 0.1512 - val_loss: 2.1757 - val_acc: 0.1915
+Epoch 2/50
+1291/1291 [==============================] - 318s 246ms/step - loss: 1.9428 - acc: 0.3126 - val_loss: 1.7000 - val_acc: 0.4209
+Epoch 3/50
+1291/1291 [==============================] - 317s 245ms/step - loss: 1.3533 - acc: 0.5319 - val_loss: 1.1974 - val_acc: 0.6468
+Epoch 4/50
+1291/1291 [==============================] - 317s 246ms/step - loss: 0.9164 - acc: 0.6893 - val_loss: 0.9361 - val_acc: 0.7070
+Epoch 5/50
+1291/1291 [==============================] - 317s 245ms/step - loss: 0.6728 - acc: 0.7771 - val_loss: 0.9294 - val_acc: 0.6898
+Epoch 6/50
+1291/1291 [==============================] - 317s 246ms/step - loss: 0.5401 - acc: 0.8213 - val_loss: 0.9519 - val_acc: 0.6915
+```
+![](report_img/model_loss_4.png)
+5. 第五次
+优化器：sgd，设定优化器参数
+```
+out_image_size = (150, 150)
+
+sgd = SGD(lr=0.0003, decay=1e-8, momentum=0.9, nesterov=True)
+```
+```
+Found 20714 images belonging to 10 classes.
+Found 1710 images belonging to 10 classes.
+model name: inceptionv3 , save weight file: inceptionv3_0.h5
+Epoch 1/50
+1294/1294 [==============================] - 366s 283ms/step - loss: 1.9313 - acc: 0.2954 - val_loss: 1.5559 - val_acc: 0.4292
+Epoch 2/50
+1294/1294 [==============================] - 319s 247ms/step - loss: 0.8376 - acc: 0.7157 - val_loss: 0.9551 - val_acc: 0.6922
+Epoch 3/50
+1294/1294 [==============================] - 319s 246ms/step - loss: 0.4790 - acc: 0.8444 - val_loss: 0.7425 - val_acc: 0.7642
+Epoch 4/50
+1294/1294 [==============================] - 319s 247ms/step - loss: 0.3549 - acc: 0.8839 - val_loss: 0.9373 - val_acc: 0.7317
+```
+![](report_img/model_loss_5.png)
+6. 第六次
+```
+out_image_size = (299, 299)
+
+sgd = SGD(lr=0.0003, decay=1e-8, momentum=0.9, nesterov=True)
+```
+```
+Found 20778 images belonging to 10 classes.
+Found 1646 images belonging to 10 classes.
+model name: inceptionv3 , save weight file: inceptionv3_0.h5
+Epoch 1/10
+1298/1298 [==============================] - 955s 736ms/step - loss: 1.0527 - acc: 0.6448 - val_loss: 0.7547 - val_acc: 0.7727
+Epoch 2/10
+1298/1298 [==============================] - 914s 704ms/step - loss: 0.2423 - acc: 0.9241 - val_loss: 0.5667 - val_acc: 0.8358
+Epoch 3/10
+1298/1298 [==============================] - 914s 704ms/step - loss: 0.1482 - acc: 0.9544 - val_loss: 0.4412 - val_acc: 0.8505
+Epoch 4/10
+1298/1298 [==============================] - 915s 705ms/step - loss: 0.1043 - acc: 0.9682 - val_loss: 0.6557 - val_acc: 0.7911
+Epoch 5/10
+1298/1298 [==============================] - 907s 699ms/step - loss: 0.0821 - acc: 0.9756 - val_loss: 0.6776 - val_acc: 0.7990
+Epoch 6/10
+1298/1298 [==============================] - 905s 697ms/step - loss: 0.0664 - acc: 0.9812 - val_loss: 0.6797 - val_acc: 0.7659
 ```
 
 
