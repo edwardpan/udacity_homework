@@ -239,7 +239,6 @@ x = Dropout(0.5)(x)
 predictions = Dense(10, activation='softmax')(x)
 ```
 ```
-out_image_size = (150, 150)
 sgd = SGD(lr=0.0003, decay=1e-8, momentum=0.9, nesterov=True)
 ```
 ```
@@ -269,7 +268,6 @@ x = GlobalAveragePooling2D()(x)
 predictions = Dense(10, activation='softmax')(x)
 ```
 ```
-out_image_size = (150, 150)
 sgd = SGD(lr=0.0002, decay=1e-8, momentum=0.9, nesterov=True)
 ```
 ```
@@ -310,7 +308,6 @@ x = GlobalAveragePooling2D()(x)
 predictions = Dense(10, activation='softmax')(x)
 ```
 ```
-out_image_size = (150, 150)
 sgd = SGD(lr=0.0001, decay=1e-8, momentum=0.9, nesterov=True)
 ```
 ```
@@ -343,6 +340,132 @@ Epoch 12/30
 643/643 [==============================] - 241s 375ms/step - loss: 0.3080 - acc: 0.9024 - val_loss: 0.9495 - val_acc: 0.7314
 Epoch 13/30
 643/643 [==============================] - 241s 374ms/step - loss: 0.2872 - acc: 0.9107 - val_loss: 0.9546 - val_acc: 0.7292
+```
+10. 第十次
+```
+epochs = 20
+batch_size=32
+out_image_size = (299, 299)
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+predictions = Dense(10, activation='softmax')(x)
+
+sgd = SGD(lr=0.0001, decay=1e-8, momentum=0.9, nesterov=True)
+```
+```
+Found 20841 images belonging to 10 classes.
+Found 1583 images belonging to 10 classes.
+model name: inceptionv3 , save weight file: saved_weights/inceptionv3_0.h5
+WARNING:tensorflow:Variable *= will be deprecated. Use variable.assign_mul if you want assignment to the variable value or 'x = x * y' if you want a new python Tensor object.
+Epoch 1/20
+651/651 [==============================] - 1032s 2s/step - loss: 2.1989 - acc: 0.2142 - val_loss: 2.0238 - val_acc: 0.3482
+Epoch 2/20
+651/651 [==============================] - 800s 1s/step - loss: 1.7572 - acc: 0.4931 - val_loss: 1.4019 - val_acc: 0.6052
+Epoch 3/20
+651/651 [==============================] - 798s 1s/step - loss: 1.1024 - acc: 0.7125 - val_loss: 1.0235 - val_acc: 0.6684
+Epoch 4/20
+651/651 [==============================] - 798s 1s/step - loss: 0.6730 - acc: 0.8208 - val_loss: 0.9216 - val_acc: 0.6983
+Epoch 5/20
+651/651 [==============================] - 798s 1s/step - loss: 0.4653 - acc: 0.8737 - val_loss: 0.8929 - val_acc: 0.7124
+Epoch 6/20
+651/651 [==============================] - 798s 1s/step - loss: 0.3654 - acc: 0.8981 - val_loss: 0.8979 - val_acc: 0.7219
+Epoch 7/20
+651/651 [==============================] - 798s 1s/step - loss: 0.3044 - acc: 0.9144 - val_loss: 0.9012 - val_acc: 0.7423
+Epoch 8/20
+651/651 [==============================] - 798s 1s/step - loss: 0.2594 - acc: 0.9268 - val_loss: 0.8911 - val_acc: 0.7474
+Epoch 9/20
+651/651 [==============================] - 799s 1s/step - loss: 0.2274 - acc: 0.9364 - val_loss: 0.8941 - val_acc: 0.7583
+Epoch 10/20
+651/651 [==============================] - 798s 1s/step - loss: 0.1998 - acc: 0.9450 - val_loss: 0.9376 - val_acc: 0.7519
+```
+11. 第十一次
+```
+epochs = 20
+batch_size=32
+out_image_size = (299, 299)
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+
+sgd = SGD(lr=0.0001, decay=1e-8, momentum=0.9, nesterov=True)
+```
+```
+Found 20600 images belonging to 10 classes.
+Found 1824 images belonging to 10 classes.
+model name: inceptionv3 , save weight file: saved_weights/inceptionv3_0.h5
+Epoch 1/20
+643/643 [==============================] - 813s 1s/step - loss: 2.3364 - acc: 0.1400 - val_loss: 2.0628 - val_acc: 0.3536
+Epoch 2/20
+643/643 [==============================] - 794s 1s/step - loss: 1.9671 - acc: 0.3163 - val_loss: 1.3928 - val_acc: 0.6557
+Epoch 3/20
+643/643 [==============================] - 793s 1s/step - loss: 1.2817 - acc: 0.6006 - val_loss: 0.7182 - val_acc: 0.8191
+Epoch 4/20
+643/643 [==============================] - 793s 1s/step - loss: 0.7879 - acc: 0.7603 - val_loss: 0.4521 - val_acc: 0.8618
+Epoch 5/20
+643/643 [==============================] - 793s 1s/step - loss: 0.5487 - acc: 0.8364 - val_loss: 0.3339 - val_acc: 0.8942
+Epoch 6/20
+643/643 [==============================] - 793s 1s/step - loss: 0.4130 - acc: 0.8789 - val_loss: 0.2857 - val_acc: 0.9079
+Epoch 7/20
+643/643 [==============================] - 793s 1s/step - loss: 0.3313 - acc: 0.9028 - val_loss: 0.2660 - val_acc: 0.9194
+Epoch 8/20
+643/643 [==============================] - 792s 1s/step - loss: 0.2828 - acc: 0.9149 - val_loss: 0.2513 - val_acc: 0.9194
+Epoch 9/20
+643/643 [==============================] - 793s 1s/step - loss: 0.2421 - acc: 0.9291 - val_loss: 0.2260 - val_acc: 0.9309
+Epoch 10/20
+643/643 [==============================] - 793s 1s/step - loss: 0.2164 - acc: 0.9372 - val_loss: 0.2289 - val_acc: 0.9337
+Epoch 11/20
+643/643 [==============================] - 793s 1s/step - loss: 0.1906 - acc: 0.9449 - val_loss: 0.2330 - val_acc: 0.9227
+```
+12. 第十二次
+```
+epochs = 20
+batch_size=32
+out_image_size = (299, 299)
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+
+sgd = SGD(lr=0.0001, decay=1e-7, momentum=0.9, nesterov=True)
+```
+```
+Found 20622 images belonging to 10 classes.
+Found 1802 images belonging to 10 classes.
+model name: inceptionv3 , save weight file: saved_weights/inceptionv3_0.h5
+Epoch 1/20
+644/644 [==============================] - 823s 1s/step - loss: 2.3173 - acc: 0.1498 - val_loss: 2.0363 - val_acc: 0.3253
+Epoch 2/20
+644/644 [==============================] - 800s 1s/step - loss: 1.9181 - acc: 0.3263 - val_loss: 1.3049 - val_acc: 0.6217
+Epoch 3/20
+644/644 [==============================] - 799s 1s/step - loss: 1.2794 - acc: 0.5822 - val_loss: 0.7394 - val_acc: 0.7885
+Epoch 4/20
+644/644 [==============================] - 795s 1s/step - loss: 0.8195 - acc: 0.7442 - val_loss: 0.5157 - val_acc: 0.8387
+Epoch 5/20
+644/644 [==============================] - 794s 1s/step - loss: 0.5611 - acc: 0.8251 - val_loss: 0.3948 - val_acc: 0.8834
+Epoch 6/20
+644/644 [==============================] - 794s 1s/step - loss: 0.4305 - acc: 0.8688 - val_loss: 0.3637 - val_acc: 0.8761
+Epoch 7/20
+644/644 [==============================] - 795s 1s/step - loss: 0.3503 - acc: 0.8952 - val_loss: 0.3263 - val_acc: 0.8884
+Epoch 8/20
+644/644 [==============================] - 795s 1s/step - loss: 0.2964 - acc: 0.9087 - val_loss: 0.3658 - val_acc: 0.8705
+```
+![](report_img/model_loss_12.png)
+13. 第十三次
+```
+epochs = 20
+batch_size=32
+out_image_size = (299, 299)
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+
+sgd = SGD(lr=0.0005, decay=2.5e-7, momentum=0.9, nesterov=True)
 ```
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
