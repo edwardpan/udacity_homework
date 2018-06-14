@@ -550,6 +550,21 @@ predictions = Dense(10, activation='softmax')(x)
 
 sgd = SGD(lr=0.0001, decay=1e-8, momentum=0.9, nesterov=True)
 ```
+```
+Found 20754 images belonging to 10 classes.
+Found 1670 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_0.h5
+Epoch 1/20
+648/648 [==============================] - 827s 1s/step - loss: 2.3405 - acc: 0.1409 - val_loss: 2.1493 - val_acc: 0.2097
+Epoch 2/20
+648/648 [==============================] - 793s 1s/step - loss: 1.9716 - acc: 0.3121 - val_loss: 1.6622 - val_acc: 0.4567
+Epoch 3/20
+648/648 [==============================] - 793s 1s/step - loss: 1.3582 - acc: 0.5614 - val_loss: 1.1167 - val_acc: 0.6016
+Epoch 4/20
+648/648 [==============================] - 789s 1s/step - loss: 0.8507 - acc: 0.7343 - val_loss: 0.8583 - val_acc: 0.7380
+
+未完待续
+```
 
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
