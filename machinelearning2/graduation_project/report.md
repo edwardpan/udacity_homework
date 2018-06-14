@@ -565,7 +565,45 @@ Epoch 4/20
 
 未完待续
 ```
+17. 第十七次
+```
+epochs = 20
+batch_size=32
+out_image_size = (299, 299)
+val_loss_stop = 5
 
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+
+op = Adam(lr=0.0005)
+```
+```
+Found 20673 images belonging to 10 classes.
+Found 1751 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_0.h5
+Epoch 1/20
+646/646 [==============================] - 847s 1s/step - loss: 0.7558 - acc: 0.7401 - val_loss: 0.9402 - val_acc: 0.6968
+Epoch 2/20
+646/646 [==============================] - 817s 1s/step - loss: 0.2239 - acc: 0.9295 - val_loss: 0.1532 - val_acc: 0.9525
+
+Found 20714 images belonging to 10 classes.
+Found 1710 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_1.h5
+Epoch 1/20
+647/647 [==============================] - 854s 1s/step - loss: 0.5405 - acc: 0.8222 - val_loss: 1.2955 - val_acc: 0.6822
+Epoch 2/20
+647/647 [==============================] - 818s 1s/step - loss: 0.2101 - acc: 0.9363 - val_loss: 0.4554 - val_acc: 0.8608
+
+Found 20754 images belonging to 10 classes.
+Found 1670 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_2.h5
+Epoch 1/20
+648/648 [==============================] - 862s 1s/step - loss: 0.5553 - acc: 0.8174 - val_loss: 0.8580 - val_acc: 0.7548
+Epoch 2/20
+648/648 [==============================] - 820s 1s/step - loss: 0.2135 - acc: 0.9337 - val_loss: 0.4685 - val_acc: 0.8552
+```
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
