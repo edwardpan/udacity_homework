@@ -604,6 +604,20 @@ Epoch 1/20
 Epoch 2/20
 648/648 [==============================] - 820s 1s/step - loss: 0.2135 - acc: 0.9337 - val_loss: 0.4685 - val_acc: 0.8552
 ```
+18. 第十八次
+```
+epochs = 20
+batch_size=32
+out_image_size = (299, 299)
+val_loss_stop = 5
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+
+op = Adam(lr=0.0003)
+```
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
