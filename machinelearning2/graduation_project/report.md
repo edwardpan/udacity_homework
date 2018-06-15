@@ -609,14 +609,28 @@ Epoch 2/20
 epochs = 20
 batch_size=32
 out_image_size = (299, 299)
-val_loss_stop = 5
+val_loss_stop = 0.01
 
 x = Dropout(0.5)(x)
 x = GlobalAveragePooling2D()(x)
 x = Dropout(0.5)(x)
 predictions = Dense(10, activation='softmax')(x)
 
-op = Adam(lr=0.0003)
+sgd = SGD(lr=0.0002, decay=4e-8, momentum=0.9, nesterov=True)
+```
+使用imgaug换掉了keras自带的图像生成器
+```
+Found 20600 images belonging to 10 classes.
+Found 1824 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_0.h5
+Epoch 1/20
+643/643 [==============================] - 1052s 2s/step - loss: 2.2899 - acc: 0.1622 - val_loss: 1.5193 - val_acc: 0.5280
+Epoch 2/20
+643/643 [==============================] - 884s 1s/step - loss: 1.6777 - acc: 0.4136 - val_loss: 0.5402 - val_acc: 0.8432
+Epoch 3/20
+643/643 [==============================] - 898s 1s/step - loss: 1.0957 - acc: 0.6269 - val_loss: 0.3259 - val_acc: 0.8925
+Epoch 4/20
+643/643 [==============================] - 887s 1s/step - loss: 0.8092 - acc: 0.7269 - val_loss: 0.2082 - val_acc: 0.9309
 ```
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
