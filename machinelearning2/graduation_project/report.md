@@ -633,6 +633,203 @@ Epoch 4/20
 643/643 [==============================] - 887s 1s/step - loss: 0.8092 - acc: 0.7269 - val_loss: 0.2082 - val_acc: 0.9309
 ```
 
+19. 第十九次
+```
+epochs = 20
+batch_size=32
+out_image_size = (299, 299)
+val_loss_stop = 0.01
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+predictions = Dense(10, activation='softmax')(x)
+
+op = Adam(lr=0.0003)
+```
+自动停止
+```
+Found 20600 images belonging to 10 classes.
+Found 1824 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_0.h5
+Epoch 1/10
+643/643 [==============================] - 711s 1s/step - loss: 0.7969 - acc: 0.7280 - val_loss: 0.1855 - val_acc: 0.9276
+Epoch 2/10
+643/643 [==============================] - 695s 1s/step - loss: 0.3945 - acc: 0.8697 - val_loss: 0.2586 - val_acc: 0.9112
+
+Found 20593 images belonging to 10 classes.
+Found 1831 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_1.h5
+Epoch 1/10
+643/643 [==============================] - 705s 1s/step - loss: 0.8024 - acc: 0.7301 - val_loss: 0.2657 - val_acc: 0.9013
+Epoch 2/10
+643/643 [==============================] - 694s 1s/step - loss: 0.3988 - acc: 0.8697 - val_loss: 0.2169 - val_acc: 0.9227
+Epoch 3/10
+643/643 [==============================] - 698s 1s/step - loss: 0.3369 - acc: 0.8876 - val_loss: 0.2117 - val_acc: 0.9282
+
+Found 20577 images belonging to 10 classes.
+Found 1847 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_2.h5
+Epoch 1/10
+643/643 [==============================] - 700s 1s/step - loss: 0.7956 - acc: 0.7307 - val_loss: 0.7737 - val_acc: 0.7615
+Epoch 2/10
+643/643 [==============================] - 731s 1s/step - loss: 0.4041 - acc: 0.8697 - val_loss: 0.2663 - val_acc: 0.9265
+Epoch 3/10
+643/643 [==============================] - 729s 1s/step - loss: 0.3291 - acc: 0.8941 - val_loss: 0.2251 - val_acc: 0.9221
+Epoch 4/10
+643/643 [==============================] - 716s 1s/step - loss: 0.2981 - acc: 0.9040 - val_loss: 0.1864 - val_acc: 0.9293
+Epoch 5/10
+643/643 [==============================] - 706s 1s/step - loss: 0.2704 - acc: 0.9112 - val_loss: 0.2249 - val_acc: 0.9090
+
+Found 20622 images belonging to 10 classes.
+Found 1802 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_3.h5
+Epoch 1/10
+644/644 [==============================] - 725s 1s/step - loss: 0.7771 - acc: 0.7370 - val_loss: 0.3927 - val_acc: 0.8789
+Epoch 2/10
+644/644 [==============================] - 701s 1s/step - loss: 0.3955 - acc: 0.8714 - val_loss: 0.4207 - val_acc: 0.8605
+
+Found 20665 images belonging to 10 classes.
+Found 1759 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_4.h5
+Epoch 1/10
+645/645 [==============================] - 708s 1s/step - loss: 0.7724 - acc: 0.7365 - val_loss: 0.4658 - val_acc: 0.8461
+Epoch 2/10
+645/645 [==============================] - 707s 1s/step - loss: 0.3953 - acc: 0.8712 - val_loss: 0.5559 - val_acc: 0.8681
+
+Found 20673 images belonging to 10 classes.
+Found 1751 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_5.h5
+Epoch 1/10
+646/646 [==============================] - 717s 1s/step - loss: 0.7878 - acc: 0.7301 - val_loss: 0.3215 - val_acc: 0.9034
+Epoch 2/10
+646/646 [==============================] - 709s 1s/step - loss: 0.4031 - acc: 0.8661 - val_loss: 0.4694 - val_acc: 0.8634
+
+Found 20714 images belonging to 10 classes.
+Found 1710 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_6.h5
+Epoch 1/10
+647/647 [==============================] - 725s 1s/step - loss: 0.7579 - acc: 0.7437 - val_loss: 0.7232 - val_acc: 0.7995
+Epoch 2/10
+647/647 [==============================] - 710s 1s/step - loss: 0.3827 - acc: 0.8765 - val_loss: 1.0598 - val_acc: 0.7936
+
+Found 20754 images belonging to 10 classes.
+Found 1670 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_7.h5
+Epoch 1/10
+648/648 [==============================] - 735s 1s/step - loss: 0.7734 - acc: 0.7397 - val_loss: 0.2928 - val_acc: 0.9261
+Epoch 2/10
+648/648 [==============================] - 697s 1s/step - loss: 0.3890 - acc: 0.8727 - val_loss: 0.5392 - val_acc: 0.8504
+
+Found 20740 images belonging to 10 classes.
+Found 1684 images belonging to 10 classes.
+model name: inceptionv3 , will save weight file: saved_weights/inceptionv3_8.h5
+Epoch 1/10
+648/648 [==============================] - 748s 1s/step - loss: 0.8334 - acc: 0.7189 - val_loss: 0.8631 - val_acc: 0.7386
+Epoch 2/10
+648/648 [==============================] - 707s 1s/step - loss: 0.4124 - acc: 0.8655 - val_loss: 0.6439 - val_acc: 0.8005
+Epoch 3/10
+648/648 [==============================] - 707s 1s/step - loss: 0.3281 - acc: 0.8932 - val_loss: 0.5077 - val_acc: 0.8155
+Epoch 4/10
+648/648 [==============================] - 709s 1s/step - loss: 0.2815 - acc: 0.9084 - val_loss: 0.4365 - val_acc: 0.8528
+Epoch 5/10
+648/648 [==============================] - 706s 1s/step - loss: 0.2655 - acc: 0.9141 - val_loss: 0.4702 - val_acc: 0.8714
+```
+19. 第十九次
+使用Xception模型
+```
+epochs = 20
+batch_size=32
+out_image_size = (299, 299)
+val_loss_stop = 0.01
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+predictions = Dense(10, activation='softmax')(x)
+
+op = Adadelta()
+```
+```
+Found 20754 images belonging to 10 classes.
+Found 1670 images belonging to 10 classes.
+model name: xception , will save weight file: saved_weights/xception_0.h5
+Epoch 1/10
+648/648 [==============================] - 738s 1s/step - loss: 0.6810 - acc: 0.7740 - val_loss: 0.3584 - val_acc: 0.8804
+Epoch 2/10
+648/648 [==============================] - 742s 1s/step - loss: 0.3443 - acc: 0.8896 - val_loss: 0.2012 - val_acc: 0.9417
+Epoch 3/10
+648/648 [==============================] - 736s 1s/step - loss: 0.2783 - acc: 0.9116 - val_loss: 0.2665 - val_acc: 0.9171
+```
+![](report_img/model_loss_19_0.png)
+```
+Found 20740 images belonging to 10 classes.
+Found 1684 images belonging to 10 classes.
+model name: xception , will save weight file: saved_weights/xception_1.h5
+Epoch 1/10
+648/648 [==============================] - 758s 1s/step - loss: 0.6857 - acc: 0.7733 - val_loss: 0.8786 - val_acc: 0.8017
+Epoch 2/10
+648/648 [==============================] - 727s 1s/step - loss: 0.3378 - acc: 0.8920 - val_loss: 0.2434 - val_acc: 0.9213
+Epoch 3/10
+648/648 [==============================] - 751s 1s/step - loss: 0.2795 - acc: 0.9109 - val_loss: 0.3092 - val_acc: 0.9099
+```
+![](report_img/model_loss_19_1.png)
+```
+Found 20762 images belonging to 10 classes.
+Found 1662 images belonging to 10 classes.
+model name: xception , will save weight file: saved_weights/xception_2.h5
+Epoch 1/10
+648/648 [==============================] - 747s 1s/step - loss: 0.6995 - acc: 0.7654 - val_loss: 0.1780 - val_acc: 0.9485
+Epoch 2/10
+648/648 [==============================] - 747s 1s/step - loss: 0.3354 - acc: 0.8927 - val_loss: 0.3984 - val_acc: 0.9001
+```
+![](report_img/model_loss_19_2.png)
+```
+Found 20769 images belonging to 10 classes.
+Found 1655 images belonging to 10 classes.
+model name: xception , will save weight file: saved_weights/xception_3.h5
+Epoch 1/10
+649/649 [==============================] - 763s 1s/step - loss: 0.6959 - acc: 0.7666 - val_loss: 0.5046 - val_acc: 0.8634
+Epoch 2/10
+649/649 [==============================] - 729s 1s/step - loss: 0.3423 - acc: 0.8892 - val_loss: 0.4905 - val_acc: 0.8315
+Epoch 3/10
+649/649 [==============================] - 743s 1s/step - loss: 0.2615 - acc: 0.9150 - val_loss: 0.4351 - val_acc: 0.8493
+Epoch 4/10
+649/649 [==============================] - 743s 1s/step - loss: 0.2368 - acc: 0.9225 - val_loss: 0.5228 - val_acc: 0.8505
+```
+![](report_img/model_loss_19_3.png)
+```
+Found 20778 images belonging to 10 classes.
+Found 1646 images belonging to 10 classes.
+model name: xception , will save weight file: saved_weights/xception_4.h5
+Epoch 1/10
+649/649 [==============================] - 781s 1s/step - loss: 0.6643 - acc: 0.7800 - val_loss: 1.0727 - val_acc: 0.7212
+Epoch 2/10
+649/649 [==============================] - 744s 1s/step - loss: 0.3314 - acc: 0.8915 - val_loss: 0.6295 - val_acc: 0.8499
+Epoch 3/10
+649/649 [==============================] - 731s 1s/step - loss: 0.2747 - acc: 0.9118 - val_loss: 0.5324 - val_acc: 0.8542
+Epoch 4/10
+649/649 [==============================] - 739s 1s/step - loss: 0.2272 - acc: 0.9279 - val_loss: 0.3692 - val_acc: 0.8811
+Epoch 5/10
+649/649 [==============================] - 743s 1s/step - loss: 0.2042 - acc: 0.9330 - val_loss: 0.7392 - val_acc: 0.8480
+```
+![](report_img/model_loss_19_4.png)
+20. 第二十次
+使用Xception模型，KFold分为5组
+```
+epochs = 20
+batch_size=32
+out_image_size = (299, 299)
+val_loss_stop = 0.01
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+
+op = Adadelta()
+```
+
+
+
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
 你所用到的算法和技术执行的方式是否清晰记录了？
