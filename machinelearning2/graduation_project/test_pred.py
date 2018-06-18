@@ -4,33 +4,35 @@ from keras.layers.core import Dropout
 from keras.optimizers import Adam, SGD, Adadelta
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.xception import Xception
+from keras.utils import plot_model
 
 
-# base_model = Xception(weights=None, include_top=False)
-#
-# x = base_model.output
-# x = Dropout(0.5)(x)
-# x = GlobalAveragePooling2D()(x)
-# x = Dropout(0.5)(x)
-# predictions = Dense(10, activation='softmax')(x)
-#
-# model = Model(inputs=base_model.input, outputs=predictions, name=base_model.name)
+base_model = Xception(weights=None, include_top=False)
+
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+
+model = Model(inputs=base_model.input, outputs=predictions, name=base_model.name)
 # model.load_weights('saved_weights/xception_0.h5')
 #
 # #     op = SGD(lr=0.0002, decay=4e-8, momentum=0.9, nesterov=True)
-# #     op = Adam(lr=0.001, decay=10e-8)
-# model.compile(optimizer="adadelta", loss='categorical_crossentropy', metrics=['accuracy'])
-#
+op = Adam(lr=0.001, decay=10e-8)
+model.compile(optimizer=op, loss='categorical_crossentropy', metrics=['accuracy'])
+
+plot_model(model, to_file='Xception.png')
+
 # import pandas as pd
 # from keras.preprocessing.image import *
 #
 # df = pd.read_csv("data/sample_submission.csv")
 
-import os
-
-test_img_files = os.listdir("data/imgs/test1/test")
-print(test_img_files[0])
-print(os.path.join("data/imgs/test1/test", test_img_files[0]))
+# import os
+# 
+# test_img_files = os.listdir("data/imgs/test1/test")
+# print(test_img_files[0])
+# print(os.path.join("data/imgs/test1/test", test_img_files[0]))
 
 # gen = ImageDataGenerator()
 # test_generator = gen.flow_from_directory("data/imgs/test1", (299, 299), shuffle=False,

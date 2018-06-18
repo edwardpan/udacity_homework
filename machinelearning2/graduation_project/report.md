@@ -813,22 +813,220 @@ Epoch 5/10
 ```
 ![](report_img/model_loss_19_4.png)
 20. 第二十次
-使用Xception模型，KFold分为5组
+使用InceptionV3模型，KFold分为5组
 ```
-epochs = 20
+epochs = 6
 batch_size=32
 out_image_size = (299, 299)
-val_loss_stop = 0.01
+val_loss_stop = None
 
 x = Dropout(0.5)(x)
 x = GlobalAveragePooling2D()(x)
 x = Dropout(0.5)(x)
 predictions = Dense(10, activation='softmax')(x)
 
-op = Adadelta()
+op = Adam(lr=0.0003, decay=3e-8)
 ```
+```
+Found 18017 images belonging to 10 classes.
+Found 4407 images belonging to 10 classes.
+model name: inception_v3 , will save weight file: saved_weights/inception_v3_0.h5
+WARNING:tensorflow:Variable *= will be deprecated. Use variable.assign_mul if you want assignment to the variable value or 'x = x * y' if you want a new python Tensor object.
+Epoch 1/6
+563/563 [==============================] - 925s 2s/step - loss: 0.9648 - acc: 0.6748 - val_loss: 0.6726 - val_acc: 0.8200
+Epoch 2/6
+563/563 [==============================] - 654s 1s/step - loss: 0.4614 - acc: 0.8518 - val_loss: 0.5315 - val_acc: 0.8369
+Epoch 3/6
+563/563 [==============================] - 652s 1s/step - loss: 0.3580 - acc: 0.8840 - val_loss: 0.7412 - val_acc: 0.8047
+Epoch 4/6
+563/563 [==============================] - 647s 1s/step - loss: 0.3204 - acc: 0.8978 - val_loss: 0.4037 - val_acc: 0.8652
+Epoch 5/6
+563/563 [==============================] - 645s 1s/step - loss: 0.2838 - acc: 0.9084 - val_loss: 0.4717 - val_acc: 0.8679
+Epoch 6/6
+563/563 [==============================] - 643s 1s/step - loss: 0.2694 - acc: 0.9142 - val_loss: 0.4441 - val_acc: 0.8807
+```
+![](report_img/model_loss_20_0.png)
+21. 第二十一次
+使用InceptionV3模型，KFold分为5组
+```
+epochs = 10
+batch_size=32
+out_image_size = (299, 299)
+val_loss_stop = None
 
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+predictions = Dense(10, activation='softmax')(x)
 
+op = Adam(lr=0.0001, decay=4e-8)
+```
+```
+Found 18017 images belonging to 10 classes.
+Found 4407 images belonging to 10 classes.
+model name: inception_v3 , will save weight file: saved_weights/inception_v3_0.h5
+WARNING:tensorflow:Variable *= will be deprecated. Use variable.assign_mul if you want assignment to the variable value or 'x = x * y' if you want a new python Tensor object.
+Epoch 1/10
+563/563 [==============================] - 724s 1s/step - loss: 0.4831 - acc: 0.8466 - val_loss: 0.6032 - val_acc: 0.8159
+Epoch 2/10
+563/563 [==============================] - 494s 878ms/step - loss: 0.1116 - acc: 0.9647 - val_loss: 0.8054 - val_acc: 0.7876
+Epoch 3/10
+563/563 [==============================] - 489s 868ms/step - loss: 0.0741 - acc: 0.9772 - val_loss: 0.5017 - val_acc: 0.8485
+Epoch 4/10
+563/563 [==============================] - 483s 859ms/step - loss: 0.0597 - acc: 0.9805 - val_loss: 0.7995 - val_acc: 0.8417
+```
+22. 第二十二次
+使用InceptionV3模型，KFold分为5组，使用ImageDataGenerator
+```
+epochs = 20
+batch_size=64
+out_image_size = (299, 299)
+val_loss_stop = None
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+
+op = Adam(lr=0.0001, decay=10e-8)
+```
+```
+Found 17949 images belonging to 10 classes.
+Found 4475 images belonging to 10 classes.
+model name: inception_v3 , will save weight file: saved_weights/inception_v3_0.h5
+Epoch 1/20
+280/280 [==============================] - 506s 2s/step - loss: 0.7758 - acc: 0.7400 - val_loss: 0.5572 - val_acc: 0.8306
+Epoch 2/20
+280/280 [==============================] - 505s 2s/step - loss: 0.1233 - acc: 0.9615 - val_loss: 0.6580 - val_acc: 0.7973
+Epoch 3/20
+280/280 [==============================] - 484s 2s/step - loss: 0.0745 - acc: 0.9772 - val_loss: 0.5475 - val_acc: 0.8243
+Epoch 4/20
+280/280 [==============================] - 498s 2s/step - loss: 0.0531 - acc: 0.9845 - val_loss: 1.4999 - val_acc: 0.6440
+Epoch 5/20
+280/280 [==============================] - 489s 2s/step - loss: 0.0415 - acc: 0.9864 - val_loss: 0.5675 - val_acc: 0.8376
+Epoch 6/20
+280/280 [==============================] - 485s 2s/step - loss: 0.0399 - acc: 0.9883 - val_loss: 1.0448 - val_acc: 0.7321
+Epoch 7/20
+280/280 [==============================] - 481s 2s/step - loss: 0.0345 - acc: 0.9887 - val_loss: 1.1757 - val_acc: 0.7285
+Epoch 8/20
+280/280 [==============================] - 487s 2s/step - loss: 0.0329 - acc: 0.9909 - val_loss: 0.6601 - val_acc: 0.8471
+Epoch 9/20
+280/280 [==============================] - 490s 2s/step - loss: 0.0246 - acc: 0.9922 - val_loss: 0.8080 - val_acc: 0.8105
+Epoch 10/20
+280/280 [==============================] - 488s 2s/step - loss: 0.0223 - acc: 0.9933 - val_loss: 0.9342 - val_acc: 0.7991
+Epoch 11/20
+280/280 [==============================] - 485s 2s/step - loss: 0.0247 - acc: 0.9929 - val_loss: 0.5744 - val_acc: 0.8585
+Epoch 12/20
+280/280 [==============================] - 482s 2s/step - loss: 0.0226 - acc: 0.9928 - val_loss: 0.6600 - val_acc: 0.8261
+Epoch 13/20
+280/280 [==============================] - 496s 2s/step - loss: 0.0211 - acc: 0.9929 - val_loss: 0.3713 - val_acc: 0.9049
+Epoch 14/20
+280/280 [==============================] - 481s 2s/step - loss: 0.0214 - acc: 0.9935 - val_loss: 0.6793 - val_acc: 0.8179
+Epoch 15/20
+280/280 [==============================] - 483s 2s/step - loss: 0.0240 - acc: 0.9927 - val_loss: 0.4862 - val_acc: 0.8845
+Epoch 16/20
+280/280 [==============================] - 482s 2s/step - loss: 0.0173 - acc: 0.9949 - val_loss: 1.3515 - val_acc: 0.7095
+Epoch 17/20
+280/280 [==============================] - 473s 2s/step - loss: 0.0160 - acc: 0.9959 - val_loss: 0.4426 - val_acc: 0.8834
+```
+23. 第二十三次
+使用InceptionV3模型，KFold分为5组，使用ImageDataGenerator，不锁层
+```
+epochs = 20
+batch_size=64
+out_image_size = (299, 299)
+val_loss_stop = None
+
+x = GlobalAveragePooling2D()(x)
+x = Dense(1024, activation='relu')(x)
+predictions = Dense(10, activation='softmax')(x)
+
+op = Adam(lr=0.001, decay=10e-8)
+```
+```
+Found 17720 images belonging to 10 classes.
+Found 4704 images belonging to 10 classes.
+model name: inception_v3 , will save weight file: saved_weights/inception_v3_0.h5
+Epoch 1/20
+276/276 [==============================] - 498s 2s/step - loss: 2.3124 - acc: 0.1049 - val_loss: 14.4690 - val_acc: 0.1023
+Epoch 2/20
+276/276 [==============================] - 478s 2s/step - loss: 2.2553 - acc: 0.1327 - val_loss: 12.4018 - val_acc: 0.1023
+Epoch 3/20
+276/276 [==============================] - 475s 2s/step - loss: 1.9356 - acc: 0.2310 - val_loss: 12.2009 - val_acc: 0.1089
+Epoch 4/20
+276/276 [==============================] - 485s 2s/step - loss: 1.5795 - acc: 0.3821 - val_loss: 6.1384 - val_acc: 0.1316
+Epoch 5/20
+276/276 [==============================] - 493s 2s/step - loss: 0.9947 - acc: 0.6319 - val_loss: 3.3032 - val_acc: 0.1432
+Epoch 6/20
+276/276 [==============================] - 484s 2s/step - loss: 0.6442 - acc: 0.7737 - val_loss: 3.6159 - val_acc: 0.2954
+Epoch 7/20
+276/276 [==============================] - 474s 2s/step - loss: 0.4456 - acc: 0.8523 - val_loss: 8.9494 - val_acc: 0.1565
+Epoch 8/20
+276/276 [==============================] - 479s 2s/step - loss: 0.3519 - acc: 0.8846 - val_loss: 2.6147 - val_acc: 0.3245
+Epoch 9/20
+276/276 [==============================] - 477s 2s/step - loss: 0.2779 - acc: 0.9129 - val_loss: 3.2279 - val_acc: 0.2506
+Epoch 10/20
+276/276 [==============================] - 490s 2s/step - loss: 0.2214 - acc: 0.9281 - val_loss: 6.5470 - val_acc: 0.1539
+Epoch 11/20
+276/276 [==============================] - 482s 2s/step - loss: 0.1921 - acc: 0.9404 - val_loss: 2.7608 - val_acc: 0.2678
+```
+24. 第二十四次
+使用InceptionV3模型，KFold分为5组，使用ImageDataGenerator，不锁层
+```
+epochs = 20
+batch_size=64
+out_image_size = (299, 299)
+val_loss_stop = None
+
+x = Dropout(0.5)(x)
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+
+op = SGD(lr=0.0002, decay=4e-8, momentum=0.9, nesterov=True)
+```
+```
+Found 18060 images belonging to 10 classes.
+Found 4364 images belonging to 10 classes.
+model name: inception_v3 , will save weight file: saved_weights/inception_v3_0.h5
+Epoch 1/20
+282/282 [==============================] - 487s 2s/step - loss: 2.3355 - acc: 0.1451 - val_loss: 2.1266 - val_acc: 0.2877
+Epoch 2/20
+282/282 [==============================] - 492s 2s/step - loss: 2.0175 - acc: 0.2914 - val_loss: 1.7082 - val_acc: 0.4596
+Epoch 3/20
+282/282 [==============================] - 485s 2s/step - loss: 1.4400 - acc: 0.5394 - val_loss: 1.1838 - val_acc: 0.6365
+Epoch 4/20
+282/282 [==============================] - 490s 2s/step - loss: 0.8942 - acc: 0.7267 - val_loss: 0.9241 - val_acc: 0.6990
+Epoch 5/20
+282/282 [==============================] - 489s 2s/step - loss: 0.5983 - acc: 0.8210 - val_loss: 0.7710 - val_acc: 0.7390
+Epoch 6/20
+282/282 [==============================] - 480s 2s/step - loss: 0.4437 - acc: 0.8670 - val_loss: 0.7111 - val_acc: 0.7569
+Epoch 7/20
+282/282 [==============================] - 482s 2s/step - loss: 0.3534 - acc: 0.8965 - val_loss: 0.6931 - val_acc: 0.7624
+Epoch 8/20
+282/282 [==============================] - 494s 2s/step - loss: 0.2924 - acc: 0.9151 - val_loss: 0.6475 - val_acc: 0.7721
+Epoch 9/20
+282/282 [==============================] - 479s 2s/step - loss: 0.2515 - acc: 0.9249 - val_loss: 0.6469 - val_acc: 0.7769
+Epoch 10/20
+282/282 [==============================] - 484s 2s/step - loss: 0.2182 - acc: 0.9365 - val_loss: 0.6128 - val_acc: 0.7916
+Epoch 11/20
+282/282 [==============================] - 487s 2s/step - loss: 0.2000 - acc: 0.9413 - val_loss: 0.6187 - val_acc: 0.7920
+Epoch 12/20
+282/282 [==============================] - 484s 2s/step - loss: 0.1724 - acc: 0.9500 - val_loss: 0.6657 - val_acc: 0.7790
+```
+25. 第二十五次
+使用InceptionV3模型，KFold分为5组，使用ImageDataGenerator，不锁层
+```
+epochs = 20
+batch_size=64
+out_image_size = (299, 299)
+val_loss_stop = None
+
+x = GlobalAveragePooling2D()(x)
+x = Dropout(0.5)(x)
+predictions = Dense(10, activation='softmax')(x)
+
+op = SGD(lr=0.0003, decay=9e-8, momentum=0.9, nesterov=True)
+```
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
