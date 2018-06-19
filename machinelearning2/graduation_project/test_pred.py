@@ -21,7 +21,8 @@ model = Model(inputs=base_model.input, outputs=predictions, name=base_model.name
 op = Adam(lr=0.001, decay=10e-8)
 model.compile(optimizer=op, loss='categorical_crossentropy', metrics=['accuracy'])
 
-plot_model(model, to_file='Xception.png')
+print(model.summary())
+# plot_model(model, to_file='Xception.png')
 
 # import pandas as pd
 # from keras.preprocessing.image import *
