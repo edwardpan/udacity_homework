@@ -931,7 +931,67 @@ Epoch 14/30
   ```
   x = GlobalAveragePooling2D()(x)
   x = Dropout(0.5)(x)
-  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  predictions = Dense(10, activation='softmax', use_bias=False)(x)
+  ```
+- 优化器: SGD
+  - lr = 0.0002
+  - decay = 20e-8
+
+**结果：**
+```
+Epoch 1/30
+186/186 [==============================] - 526s 3s/step - loss: 2.3941 - acc: 0.1181 - val_loss: 2.2084 - val_acc: 0.1916
+Epoch 2/30
+186/186 [==============================] - 509s 3s/step - loss: 2.2166 - acc: 0.1919 - val_loss: 2.0533 - val_acc: 0.2933
+Epoch 3/30
+186/186 [==============================] - 529s 3s/step - loss: 1.9745 - acc: 0.3193 - val_loss: 1.7213 - val_acc: 0.4377
+Epoch 4/30
+186/186 [==============================] - 512s 3s/step - loss: 1.5896 - acc: 0.4943 - val_loss: 1.2519 - val_acc: 0.5981
+Epoch 5/30
+186/186 [==============================] - 513s 3s/step - loss: 1.1721 - acc: 0.6458 - val_loss: 0.9385 - val_acc: 0.6816
+Epoch 6/30
+186/186 [==============================] - 505s 3s/step - loss: 0.8768 - acc: 0.7387 - val_loss: 0.7683 - val_acc: 0.7518
+Epoch 7/30
+186/186 [==============================] - 493s 3s/step - loss: 0.6632 - acc: 0.8079 - val_loss: 0.6481 - val_acc: 0.8098
+Epoch 8/30
+186/186 [==============================] - 498s 3s/step - loss: 0.5261 - acc: 0.8468 - val_loss: 0.5707 - val_acc: 0.8286
+Epoch 9/30
+186/186 [==============================] - 501s 3s/step - loss: 0.4269 - acc: 0.8778 - val_loss: 0.5232 - val_acc: 0.8390
+Epoch 10/30
+186/186 [==============================] - 513s 3s/step - loss: 0.3561 - acc: 0.9001 - val_loss: 0.5131 - val_acc: 0.8456
+Epoch 11/30
+186/186 [==============================] - 505s 3s/step - loss: 0.3123 - acc: 0.9104 - val_loss: 0.4800 - val_acc: 0.8535
+Epoch 12/30
+186/186 [==============================] - 494s 3s/step - loss: 0.2734 - acc: 0.9243 - val_loss: 0.4880 - val_acc: 0.8537
+Epoch 13/30
+186/186 [==============================] - 500s 3s/step - loss: 0.2413 - acc: 0.9306 - val_loss: 0.4744 - val_acc: 0.8551
+Epoch 14/30
+186/186 [==============================] - 490s 3s/step - loss: 0.2140 - acc: 0.9387 - val_loss: 0.4594 - val_acc: 0.8569
+Epoch 15/30
+186/186 [==============================] - 498s 3s/step - loss: 0.1957 - acc: 0.9443 - val_loss: 0.5053 - val_acc: 0.8388
+Epoch 16/30
+186/186 [==============================] - 490s 3s/step - loss: 0.1758 - acc: 0.9518 - val_loss: 0.4823 - val_acc: 0.8469
+Epoch 17/30
+186/186 [==============================] - 501s 3s/step - loss: 0.1657 - acc: 0.9527 - val_loss: 0.4755 - val_acc: 0.8548
+```
+![](report_img/model_loss_36_0.png)
+
+**说明：**
+尝试降低学习率来防止过拟合
+
+**37. 37**
+
+**参数：**
+- 模型: InceptionV3
+- epochs = 30
+- batch_size = 96
+- 锁层: 229-310，不训练最后3个块
+- 停止提升轮数(patience): 3
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False)(x)
   ```
 - 优化器: SGD
   - lr = 0.0003
@@ -943,7 +1003,7 @@ Epoch 14/30
 ```
 
 **说明：**
-尝试对最后一层附加正则化来防止过拟合
+
 
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
