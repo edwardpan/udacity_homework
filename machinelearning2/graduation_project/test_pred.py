@@ -2,6 +2,7 @@ from keras.models import Model
 from keras.layers import Dense, GlobalAveragePooling2D, BatchNormalization, Activation
 from keras.layers.core import Dropout
 from keras.optimizers import Adam, SGD, Adadelta
+from keras.losses import categorical_crossentropy
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.xception import Xception
 from keras.utils import plot_model
