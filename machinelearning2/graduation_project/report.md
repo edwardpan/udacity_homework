@@ -1054,6 +1054,65 @@ Epoch 26/30
 ```
 ![](report_img/model_loss_37_0.png)
 **说明：**
+比锁层前loss下降更慢，val_loss在0.7左右就无法下降，过拟合更严重
+#### **38. 38**
+**说明：**
+尝试对模型进行两次训练，先用学习速度快的adam优化器做第一次训练快速收敛，在模型出现过拟合时停止训练，保存训练的权重，然后再使用学习率低的SGD优化器进行第二次训练，并锁定280层以上（即最后一个inception block）
+
+**参数：**
+- 模型: InceptionV3
+- epochs = 30
+- batch_size = 96
+- 锁层: 第1次不锁，第2次锁280
+- 数据增强：ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0003
+  - 轮数(patience): 5
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False)(x)
+  ```
+- 优化器:
+  - SGD:
+    - lr = 0.0003
+    - decay = 30e-8
+  - SGD:
+    - lr = 0.0001
+    - decay = 10e-8
+
+**结果：**
+```
+Epoch 1/30
+217/217 [==============================] - 786s 4s/step - loss: 2.3218 - acc: 0.1536 - val_loss: 2.1598 - val_acc: 0.2454
+Epoch 2/30
+217/217 [==============================] - 547s 3s/step - loss: 1.8838 - acc: 0.3529 - val_loss: 1.6111 - val_acc: 0.4063
+Epoch 3/30
+217/217 [==============================] - 537s 2s/step - loss: 1.1540 - acc: 0.6440 - val_loss: 0.9715 - val_acc: 0.6852
+Epoch 4/30
+217/217 [==============================] - 541s 2s/step - loss: 0.6825 - acc: 0.7968 - val_loss: 0.7454 - val_acc: 0.7870
+Epoch 5/30
+217/217 [==============================] - 545s 3s/step - loss: 0.4521 - acc: 0.8663 - val_loss: 0.6694 - val_acc: 0.8001
+Epoch 6/30
+217/217 [==============================] - 535s 2s/step - loss: 0.3465 - acc: 0.8985 - val_loss: 0.6702 - val_acc: 0.7983
+Epoch 7/30
+217/217 [==============================] - 552s 3s/step - loss: 0.2752 - acc: 0.9190 - val_loss: 0.6439 - val_acc: 0.8019
+Epoch 8/30
+217/217 [==============================] - 534s 2s/step - loss: 0.2394 - acc: 0.9315 - val_loss: 0.6631 - val_acc: 0.7911
+Epoch 9/30
+217/217 [==============================] - 543s 3s/step - loss: 0.2029 - acc: 0.9397 - val_loss: 0.6740 - val_acc: 0.7899
+Epoch 10/30
+217/217 [==============================] - 542s 2s/step - loss: 0.1796 - acc: 0.9463 - val_loss: 0.6952 - val_acc: 0.7923
+Epoch 00010: early stopping
+```
+![](report_img/model_loss_38_0.png)
+锁层后：
+```
+
+```
+
+**结论：**
 
 
 

@@ -98,8 +98,9 @@ import matplotlib.pyplot as plt
 
 
 class ImageAugGenerator(ImageDataGenerator):
-    def __init__(self, sequential=None, rescale=None):
+    def __init__(self, sequential=None, rescale=None, preprocessing_function=None):
         self.sequential = sequential
+        self.preprocessing_function = preprocessing_function
         self.rescale = rescale
         super(ImageAugGenerator, self).__init__(rescale=rescale, data_format='channels_last')
 
@@ -108,11 +109,11 @@ class ImageAugGenerator(ImageDataGenerator):
         return x
 
     def standardize(self, x):
-        x = x * self.rescale
-        # x = x.reshape((1,) + x.shape)
+        if self.preprocessing_function:
+            x = self.preprocessing_function(x)
+        if self.rescale:
+            x = x * self.rescale
         return x
-
-
 
 
 generator = ImageAugGenerator(seq1, rescale=1.0/255)
