@@ -1224,6 +1224,58 @@ Epoch 00006: early stopping
 使用该模型对测试集进行预测后得到分数：
 ![](report_img/kaggle_inceptionv3.jpg)
 
+#### **41. 41**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，在40的基础上换用SGD优化器，去掉l2正则化
+**参数：**
+- 模型: InceptionV3
+- epochs = 20
+- batch_size = 96
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0003
+  - 轮数(patience): 3
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax')(x)
+  ```
+- 优化器:
+  - SGD:
+    - lr = 0.0003
+    - decay = 30e-8
+
+**结果：**
+```
+Epoch 1/20
+436/436 [==============================] - 1834s 4s/step - loss: 1.5718 - acc: 0.4844 - val_loss: 0.5980 - val_acc: 0.8142
+Epoch 2/20
+436/436 [==============================] - 1137s 3s/step - loss: 0.3443 - acc: 0.9102 - val_loss: 0.2564 - val_acc: 0.8992
+Epoch 3/20
+436/436 [==============================] - 1153s 3s/step - loss: 0.1495 - acc: 0.9609 - val_loss: 0.1626 - val_acc: 0.9364
+Epoch 4/20
+436/436 [==============================] - 1123s 3s/step - loss: 0.0945 - acc: 0.9757 - val_loss: 0.1339 - val_acc: 0.9450
+Epoch 5/20
+436/436 [==============================] - 1114s 3s/step - loss: 0.0645 - acc: 0.9833 - val_loss: 0.1350 - val_acc: 0.9435
+Epoch 6/20
+436/436 [==============================] - 1154s 3s/step - loss: 0.0520 - acc: 0.9867 - val_loss: 0.1208 - val_acc: 0.9535
+Epoch 7/20
+436/436 [==============================] - 1129s 3s/step - loss: 0.0387 - acc: 0.9905 - val_loss: 0.1169 - val_acc: 0.9578
+Epoch 8/20
+436/436 [==============================] - 1116s 3s/step - loss: 0.0329 - acc: 0.9916 - val_loss: 0.1173 - val_acc: 0.9593
+Epoch 9/20
+436/436 [==============================] - 1126s 3s/step - loss: 0.0256 - acc: 0.9938 - val_loss: 0.1177 - val_acc: 0.9564
+Epoch 10/20
+436/436 [==============================] - 1124s 3s/step - loss: 0.0223 - acc: 0.9949 - val_loss: 0.1207 - val_acc: 0.9564
+Epoch 00010: early stopping
+```
+![](report_img/model_loss_41_0.png)
+**结论：**
+收敛较好，使用该模型对测试集进行预测后得到分数：
+private 0.41971, public 0.63264
+
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
