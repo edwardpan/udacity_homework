@@ -1276,6 +1276,101 @@ Epoch 00010: early stopping
 收敛较好，使用该模型对测试集进行预测后得到分数：
 private 0.41971, public 0.63264
 
+**42. 42**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，在上一次的基础上增加l2正则化，去掉最顶层的偏置项参数，调低学习率，尝试防止过拟合
+
+**参数：**
+- 模型: InceptionV3
+- epochs = 30
+- batch_size = 96
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0003
+  - 轮数(patience): 2
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器: SGD
+  - lr = 0.0002
+  - decay = 20e-8
+
+**结果：**
+```
+Epoch 1/20
+436/436 [==============================] - 1811s 4s/step - loss: 2.0969 - acc: 0.3525 - val_loss: 1.2693 - val_acc: 0.7219
+Epoch 2/20
+436/436 [==============================] - 1103s 3s/step - loss: 0.8479 - acc: 0.8260 - val_loss: 0.5861 - val_acc: 0.8670
+Epoch 3/20
+436/436 [==============================] - 1100s 3s/step - loss: 0.4710 - acc: 0.9289 - val_loss: 0.4615 - val_acc: 0.8914
+Epoch 4/20
+436/436 [==============================] - 1054s 2s/step - loss: 0.3592 - acc: 0.9563 - val_loss: 0.4009 - val_acc: 0.9171
+Epoch 5/20
+436/436 [==============================] - 1064s 2s/step - loss: 0.3027 - acc: 0.9707 - val_loss: 0.3728 - val_acc: 0.9264
+Epoch 6/20
+436/436 [==============================] - 1064s 2s/step - loss: 0.2726 - acc: 0.9774 - val_loss: 0.3384 - val_acc: 0.9407
+Epoch 7/20
+436/436 [==============================] - 1085s 2s/step - loss: 0.2513 - acc: 0.9821 - val_loss: 0.3187 - val_acc: 0.9407
+Epoch 8/20
+436/436 [==============================] - 1071s 2s/step - loss: 0.2345 - acc: 0.9854 - val_loss: 0.3082 - val_acc: 0.9521
+Epoch 9/20
+436/436 [==============================] - 1086s 2s/step - loss: 0.2188 - acc: 0.9879 - val_loss: 0.2942 - val_acc: 0.9492
+Epoch 10/20
+436/436 [==============================] - 1060s 2s/step - loss: 0.2084 - acc: 0.9895 - val_loss: 0.2871 - val_acc: 0.9535
+Epoch 11/20
+436/436 [==============================] - 1065s 2s/step - loss: 0.1986 - acc: 0.9908 - val_loss: 0.2735 - val_acc: 0.9557
+Epoch 12/20
+436/436 [==============================] - 1066s 2s/step - loss: 0.1903 - acc: 0.9919 - val_loss: 0.2853 - val_acc: 0.9471
+Epoch 13/20
+436/436 [==============================] - 1057s 2s/step - loss: 0.1818 - acc: 0.9934 - val_loss: 0.2709 - val_acc: 0.9528
+Epoch 14/20
+436/436 [==============================] - 1065s 2s/step - loss: 0.1752 - acc: 0.9937 - val_loss: 0.2602 - val_acc: 0.9557
+Epoch 15/20
+436/436 [==============================] - 1091s 3s/step - loss: 0.1681 - acc: 0.9942 - val_loss: 0.2614 - val_acc: 0.9521
+Epoch 16/20
+436/436 [==============================] - 1067s 2s/step - loss: 0.1604 - acc: 0.9957 - val_loss: 0.2654 - val_acc: 0.9492
+Epoch 00016: early stopping
+```
+![](report_img/model_loss_42_0.png)
+**结论：**
+private: 0.38998, public: 0.56024
+
+**43. 43**
+
+**说明：**
+
+
+**参数：**
+- 模型: InceptionV3
+- epochs = 30
+- batch_size = 96
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 3
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.0001
+
+**结果：**
+```
+
+```
+
+**结论：**
+
+
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
