@@ -1383,6 +1383,130 @@ Epoch 00006: early stopping
 **结论：**
 提交到kaggle中后得到成绩：private: 0.31309, public: 0.35854
 
+**44. 44**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，增加l2正则化，去掉最顶层的偏置项参数，使用Adam优化器，调低学习率，给予衰减值，尝试防止过拟合，使用ModelCheckpoint回调函数保存训练过程中得到的最优模型
+
+**参数：**
+- 模型: Xception
+- epochs = 20
+- batch_size = 32
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 3
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.00005
+    - decay = 2e-8
+
+**结果：**
+```
+Epoch 1/20
+1308/1308 [==============================] - 1739s 1s/step - loss: 0.4313 - acc: 0.9279 - val_loss: 0.2288 - val_acc: 0.9714
+
+Epoch 00001: val_loss improved from inf to 0.22877, saving model to saved_weights/xception_model.h5
+Epoch 2/20
+1308/1308 [==============================] - 1143s 874ms/step - loss: 0.1272 - acc: 0.9966 - val_loss: 0.1659 - val_acc: 0.9707
+
+Epoch 00002: val_loss improved from 0.22877 to 0.16592, saving model to saved_weights/xception_model.h5
+Epoch 3/20
+1308/1308 [==============================] - 1138s 870ms/step - loss: 0.0687 - acc: 0.9978 - val_loss: 0.1276 - val_acc: 0.9728
+
+Epoch 00003: val_loss improved from 0.16592 to 0.12761, saving model to saved_weights/xception_model.h5
+Epoch 4/20
+1308/1308 [==============================] - 1134s 867ms/step - loss: 0.0445 - acc: 0.9987 - val_loss: 0.0815 - val_acc: 0.9857
+
+Epoch 00004: val_loss improved from 0.12761 to 0.08146, saving model to saved_weights/xception_model.h5
+Epoch 5/20
+1308/1308 [==============================] - 1143s 874ms/step - loss: 0.0360 - acc: 0.9985 - val_loss: 0.0810 - val_acc: 0.9836
+
+Epoch 00005: val_loss improved from 0.08146 to 0.08101, saving model to saved_weights/xception_model.h5
+Epoch 6/20
+1308/1308 [==============================] - 1136s 868ms/step - loss: 0.0298 - acc: 0.9991 - val_loss: 0.0988 - val_acc: 0.9771
+
+Epoch 00006: val_loss did not improve from 0.08101
+Epoch 7/20
+1308/1308 [==============================] - 1152s 881ms/step - loss: 0.0293 - acc: 0.9987 - val_loss: 0.0809 - val_acc: 0.9800
+
+Epoch 00007: val_loss improved from 0.08101 to 0.08088, saving model to saved_weights/xception_model.h5
+Epoch 8/20
+1308/1308 [==============================] - 1116s 853ms/step - loss: 0.0243 - acc: 0.9993 - val_loss: 0.0832 - val_acc: 0.9857
+
+Epoch 00008: val_loss did not improve from 0.08088
+Epoch 9/20
+1308/1308 [==============================] - 1120s 857ms/step - loss: 0.0237 - acc: 0.9991 - val_loss: 0.1961 - val_acc: 0.9507
+
+Epoch 00009: val_loss did not improve from 0.08088
+Epoch 10/20
+1308/1308 [==============================] - 1136s 868ms/step - loss: 0.0223 - acc: 0.9990 - val_loss: 0.0924 - val_acc: 0.9693
+
+Epoch 00010: val_loss did not improve from 0.08088
+Epoch 00010: early stopping
+```
+![](report_img/model_loss_44_0.png)
+**结论：**
+提交到kaggle中后得到成绩：private: 0.29201, public: 0.35846
+
+**45. 45**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，增加l2正则化，去掉最顶层的偏置项参数，使用Adam优化器，调低学习率，给予衰减值，尝试防止过拟合，使用ModelCheckpoint回调函数保存训练过程中得到的最优模型
+
+**参数：**
+- 模型: InceptionResNetV2
+- epochs = 20
+- batch_size = 32
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 2
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.00005
+    - decay = 2e-8
+
+**结果：**
+```
+Epoch 1/20
+1308/1308 [==============================] - 1263s 965ms/step - loss: 0.3870 - acc: 0.9350 - val_loss: 0.3092 - val_acc: 0.9485
+
+Epoch 00001: val_loss improved from inf to 0.30917, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 2/20
+1308/1308 [==============================] - 1185s 906ms/step - loss: 0.1395 - acc: 0.9942 - val_loss: 0.2685 - val_acc: 0.9414
+
+Epoch 00002: val_loss improved from 0.30917 to 0.26853, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 3/20
+1308/1308 [==============================] - 1155s 883ms/step - loss: 0.0777 - acc: 0.9969 - val_loss: 0.1460 - val_acc: 0.9700
+
+Epoch 00003: val_loss improved from 0.26853 to 0.14600, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 4/20
+1308/1308 [==============================] - 1165s 891ms/step - loss: 0.0520 - acc: 0.9960 - val_loss: 0.1650 - val_acc: 0.9543
+
+Epoch 00004: val_loss did not improve from 0.14600
+Epoch 5/20
+1308/1308 [==============================] - 1163s 889ms/step - loss: 0.0378 - acc: 0.9972 - val_loss: 0.1776 - val_acc: 0.9550
+
+Epoch 00005: val_loss did not improve from 0.14600
+Epoch 00005: early stopping
+```
+![](report_img/model_loss_45_0.png)
+**结论：**
+提交到kaggle中后得到成绩：private: 0.43748, public: 0.53600
+
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
