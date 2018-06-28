@@ -1507,6 +1507,189 @@ Epoch 00005: early stopping
 **结论：**
 提交到kaggle中后得到成绩：private: 0.43748, public: 0.53600
 
+**46. 46**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，增加l2正则化，去掉最顶层的偏置项参数，使用Adam优化器，调低学习率，给予衰减值，尝试防止过拟合，使用ModelCheckpoint回调函数保存训练过程中得到的最优模型
+
+**参数：**
+- 模型: InceptionResNetV2
+- epochs = 20
+- batch_size = 32
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 2
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.00005
+    - decay = 2e-8
+
+**结果：**
+```
+Epoch 1/20
+1275/1275 [==============================] - 1778s 1s/step - loss: 0.3926 - acc: 0.9334 - val_loss: 0.2642 - val_acc: 0.9644
+
+Epoch 00001: val_loss improved from inf to 0.26425, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 2/20
+1275/1275 [==============================] - 1171s 919ms/step - loss: 0.1417 - acc: 0.9945 - val_loss: 0.2447 - val_acc: 0.9473
+
+Epoch 00002: val_loss improved from 0.26425 to 0.24468, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 3/20
+1275/1275 [==============================] - 1171s 918ms/step - loss: 0.0804 - acc: 0.9965 - val_loss: 0.1736 - val_acc: 0.9607
+
+Epoch 00003: val_loss improved from 0.24468 to 0.17357, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 4/20
+1275/1275 [==============================] - 1179s 925ms/step - loss: 0.0508 - acc: 0.9967 - val_loss: 0.2948 - val_acc: 0.9277
+
+Epoch 00004: val_loss did not improve from 0.17357
+Epoch 5/20
+1275/1275 [==============================] - 1160s 910ms/step - loss: 0.0387 - acc: 0.9967 - val_loss: 0.1481 - val_acc: 0.9644
+
+Epoch 00005: val_loss improved from 0.17357 to 0.14806, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 6/20
+1275/1275 [==============================] - 1174s 921ms/step - loss: 0.0318 - acc: 0.9973 - val_loss: 0.1683 - val_acc: 0.9571
+
+Epoch 00006: val_loss did not improve from 0.14806
+Epoch 7/20
+1275/1275 [==============================] - 1126s 883ms/step - loss: 0.0268 - acc: 0.9980 - val_loss: 0.1350 - val_acc: 0.9690
+
+Epoch 00007: val_loss improved from 0.14806 to 0.13503, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 8/20
+1275/1275 [==============================] - 1125s 882ms/step - loss: 0.0249 - acc: 0.9979 - val_loss: 0.1222 - val_acc: 0.9706
+
+Epoch 00008: val_loss improved from 0.13503 to 0.12222, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 9/20
+1275/1275 [==============================] - 1107s 868ms/step - loss: 0.0207 - acc: 0.9986 - val_loss: 0.1367 - val_acc: 0.9690
+
+Epoch 00009: val_loss did not improve from 0.12222
+Epoch 10/20
+1275/1275 [==============================] - 1102s 865ms/step - loss: 0.0206 - acc: 0.9985 - val_loss: 0.1223 - val_acc: 0.9742
+
+Epoch 00010: val_loss did not improve from 0.12222
+Epoch 00010: early stopping
+```
+![](report_img/model_loss_46_0.png)
+**结论：**
+提交到kaggle中后得到成绩：private: 0.34102, public: 0.37520
+
+**47.47**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，增加l2正则化，去掉最顶层的偏置项参数，使用Adam优化器，调低学习率，给予衰减值，尝试防止过拟合，使用ModelCheckpoint回调函数保存训练过程中得到的最优模型
+
+**参数：**
+- 模型: InceptionV3
+- epochs = 20
+- batch_size = 96
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 3
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.00005
+    - decay = 2e-8
+
+**结果：**
+```
+Epoch 1/20
+425/425 [==============================] - 1101s 3s/step - loss: 0.5540 - acc: 0.8888 - val_loss: 0.2646 - val_acc: 0.9769
+
+Epoch 00001: val_loss improved from inf to 0.26456, saving model to saved_weights/inception_v3_model.h5
+Epoch 2/20
+425/425 [==============================] - 1030s 2s/step - loss: 0.1946 - acc: 0.9944 - val_loss: 0.2528 - val_acc: 0.9708
+
+Epoch 00002: val_loss improved from 0.26456 to 0.25283, saving model to saved_weights/inception_v3_model.h5
+Epoch 3/20
+425/425 [==============================] - 1038s 2s/step - loss: 0.1534 - acc: 0.9974 - val_loss: 0.2762 - val_acc: 0.9431
+
+Epoch 00003: val_loss did not improve from 0.25283
+Epoch 4/20
+425/425 [==============================] - 1027s 2s/step - loss: 0.1187 - acc: 0.9981 - val_loss: 0.1847 - val_acc: 0.9646
+
+Epoch 00004: val_loss improved from 0.25283 to 0.18466, saving model to saved_weights/inception_v3_model.h5
+Epoch 5/20
+425/425 [==============================] - 1030s 2s/step - loss: 0.0867 - acc: 0.9991 - val_loss: 0.1302 - val_acc: 0.9831
+
+Epoch 00005: val_loss improved from 0.18466 to 0.13019, saving model to saved_weights/inception_v3_model.h5
+Epoch 6/20
+425/425 [==============================] - 1054s 2s/step - loss: 0.0618 - acc: 0.9994 - val_loss: 0.1204 - val_acc: 0.9805
+
+Epoch 00006: val_loss improved from 0.13019 to 0.12042, saving model to saved_weights/inception_v3_model.h5
+Epoch 7/20
+425/425 [==============================] - 1019s 2s/step - loss: 0.0464 - acc: 0.9990 - val_loss: 0.2858 - val_acc: 0.9088
+
+Epoch 00007: val_loss did not improve from 0.12042
+Epoch 8/20
+425/425 [==============================] - 1024s 2s/step - loss: 0.0348 - acc: 0.9991 - val_loss: 0.2177 - val_acc: 0.9359
+
+Epoch 00008: val_loss did not improve from 0.12042
+Epoch 9/20
+425/425 [==============================] - 1027s 2s/step - loss: 0.0276 - acc: 0.9990 - val_loss: 0.0824 - val_acc: 0.9780
+
+Epoch 00009: val_loss improved from 0.12042 to 0.08245, saving model to saved_weights/inception_v3_model.h5
+Epoch 10/20
+425/425 [==============================] - 1026s 2s/step - loss: 0.0257 - acc: 0.9985 - val_loss: 0.0668 - val_acc: 0.9872
+
+Epoch 00010: val_loss improved from 0.08245 to 0.06683, saving model to saved_weights/inception_v3_model.h5
+Epoch 11/20
+425/425 [==============================] - 1031s 2s/step - loss: 0.0201 - acc: 0.9991 - val_loss: 0.0381 - val_acc: 0.9944
+
+Epoch 00011: val_loss improved from 0.06683 to 0.03811, saving model to saved_weights/inception_v3_model.h5
+Epoch 12/20
+425/425 [==============================] - 1031s 2s/step - loss: 0.0203 - acc: 0.9988 - val_loss: 0.0330 - val_acc: 0.9954
+
+Epoch 00012: val_loss improved from 0.03811 to 0.03300, saving model to saved_weights/inception_v3_model.h5
+Epoch 13/20
+425/425 [==============================] - 1010s 2s/step - loss: 0.0174 - acc: 0.9992 - val_loss: 0.1358 - val_acc: 0.9646
+
+Epoch 00013: val_loss did not improve from 0.03300
+Epoch 14/20
+425/425 [==============================] - 1033s 2s/step - loss: 0.0187 - acc: 0.9987 - val_loss: 0.0316 - val_acc: 0.9954
+
+Epoch 00014: val_loss improved from 0.03300 to 0.03157, saving model to saved_weights/inception_v3_model.h5
+Epoch 15/20
+425/425 [==============================] - 1015s 2s/step - loss: 0.0148 - acc: 0.9995 - val_loss: 0.0328 - val_acc: 0.9949
+
+Epoch 00015: val_loss did not improve from 0.03157
+Epoch 16/20
+425/425 [==============================] - 1033s 2s/step - loss: 0.0150 - acc: 0.9991 - val_loss: 0.0884 - val_acc: 0.9795
+
+Epoch 00016: val_loss did not improve from 0.03157
+Epoch 17/20
+425/425 [==============================] - 1032s 2s/step - loss: 0.0148 - acc: 0.9993 - val_loss: 0.0248 - val_acc: 0.9959
+
+Epoch 00017: val_loss improved from 0.03157 to 0.02483, saving model to saved_weights/inception_v3_model.h5
+Epoch 18/20
+425/425 [==============================] - 1030s 2s/step - loss: 0.0149 - acc: 0.9990 - val_loss: 0.0467 - val_acc: 0.9887
+
+Epoch 00018: val_loss did not improve from 0.02483
+Epoch 19/20
+425/425 [==============================] - 1031s 2s/step - loss: 0.0158 - acc: 0.9988 - val_loss: 0.0795 - val_acc: 0.9754
+
+Epoch 00019: val_loss did not improve from 0.02483
+Epoch 20/20
+425/425 [==============================] - 1037s 2s/step - loss: 0.0133 - acc: 0.9994 - val_loss: 0.0538 - val_acc: 0.9851
+
+Epoch 00020: val_loss did not improve from 0.02483
+Epoch 00020: early stopping
+```
+![](report_img/model_loss_47_0.png)
+**结论：**
+
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
