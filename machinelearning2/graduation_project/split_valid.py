@@ -5,8 +5,13 @@ import os
 import tqdm
 import shutil
 
-def split(choice_ids, train_dir, val_dir, test_dir, origin_test_dir, saved_weights_dir="saved_weights"):
+def split(choice_ids, train_pd_path, train_aug_pd_path, train_dir, val_dir, test_dir, origin_test_dir, saved_weights_dir="saved_weights"):
     print("选择作为验证集的司机ID:", choice_ids)
+
+    drivers_pd = pd.read_csv(train_pd_path)
+    imgs_pd = drivers_pd["img"]
+    class_pd = drivers_pd["classname"]
+    subject_pd = drivers_pd["subject"]
 
     # 按选择的司机ID分割训练集和验证集
     val_index = []
@@ -21,7 +26,7 @@ def split(choice_ids, train_dir, val_dir, test_dir, origin_test_dir, saved_weigh
     print("分割的训练集数量:", np.alen(train_index), "，验证集数量:", np.alen(val_index))
 
     # 读取被数据增强处理的图片
-    drivers_aug_pd = pd.read_csv("data/drivers_img_aug_list.csv")
+    drivers_aug_pd = pd.read_csv(train_aug_pd_path)
     imgs_aug_pd = drivers_aug_pd["img"]
     class_aug_pd = drivers_aug_pd["classname"]
     subject_aug_pd = drivers_aug_pd["subject"]
