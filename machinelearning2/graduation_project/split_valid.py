@@ -15,7 +15,7 @@ def split(choice_ids, train_pd_path, train_aug_pd_path, train_dir, val_dir, test
 
     # 按选择的司机ID分割训练集和验证集
     val_index = []
-    for choice in choices:
+    for choice in choice_ids:
         val_index.extend(subject_pd[subject_pd == choice].index.tolist())
 
     test_mask = np.zeros(np.alen(subject_pd), dtype=np.bool)
@@ -32,7 +32,7 @@ def split(choice_ids, train_pd_path, train_aug_pd_path, train_dir, val_dir, test
     subject_aug_pd = drivers_aug_pd["subject"]
 
     exclude_index = []
-    for choice in choices:
+    for choice in choice_ids:
         exclude_index.extend(subject_aug_pd[subject_aug_pd == choice].index.tolist())
     test_aug_mask = np.zeros(np.alen(subject_aug_pd), dtype=np.bool)
     for val_i in exclude_index:
@@ -80,7 +80,7 @@ def rmrf_mkdir(dirname):
 # 在新的训练或验证集目录中为图片创建到原位置的链接
 def link_imgs(target_dir, X, y):
     print("link images to directory", target_dir)
-    for img_name, target in tqdm(zip(X, y)):
+    for img_name, target in zip(X, y):
         symlink_dir = os.path.join(target_dir, target)
         if not os.path.exists(symlink_dir):
             os.mkdir(symlink_dir)
@@ -89,7 +89,7 @@ def link_imgs(target_dir, X, y):
 
 def link_aug_imgs(target_dir, X, y):
     print("link augmented images to directory", target_dir)
-    for img_name, target in tqdm(zip(X, y)):
+    for img_name, target in zip(X, y):
         symlink_dir = os.path.join(target_dir, target)
         if not os.path.exists(symlink_dir):
             os.mkdir(symlink_dir)
