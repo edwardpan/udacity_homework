@@ -1691,6 +1691,171 @@ Epoch 00020: early stopping
 **结论：**
 提交到kaggle中后得到成绩：private: 0.28068, public: 0.31967
 
+**48. 48**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，增加l2正则化，去掉最顶层的偏置项参数，使用Adam优化器，调低学习率，给予衰减值，尝试防止过拟合，使用ModelCheckpoint回调函数保存训练过程中得到的最优模型
+
+**参数：**
+- 模型: ResNet50
+- epochs = 20
+- batch_size = 96
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 3
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.00005
+    - decay = 2e-8
+
+**结果：**
+```
+Epoch 1/20
+425/425 [==============================] - 1044s 2s/step - loss: 0.5090 - acc: 0.9011 - val_loss: 0.2658 - val_acc: 0.9713
+
+Epoch 00001: val_loss improved from inf to 0.26581, saving model to saved_weights/resnet50_model.h5
+Epoch 2/20
+425/425 [==============================] - 624s 1s/step - loss: 0.1981 - acc: 0.9938 - val_loss: 0.4172 - val_acc: 0.9247
+
+Epoch 00002: val_loss did not improve from 0.26581
+Epoch 3/20
+425/425 [==============================] - 628s 1s/step - loss: 0.1618 - acc: 0.9969 - val_loss: 0.7317 - val_acc: 0.8965
+
+Epoch 00003: val_loss did not improve from 0.26581
+Epoch 4/20
+425/425 [==============================] - 626s 1s/step - loss: 0.1321 - acc: 0.9979 - val_loss: 0.2420 - val_acc: 0.9544
+
+Epoch 00004: val_loss improved from 0.26581 to 0.24199, saving model to saved_weights/resnet50_model.h5
+Epoch 5/20
+425/425 [==============================] - 633s 1s/step - loss: 0.1020 - acc: 0.9989 - val_loss: 0.3930 - val_acc: 0.9083
+
+Epoch 00005: val_loss did not improve from 0.24199
+Epoch 6/20
+425/425 [==============================] - 629s 1s/step - loss: 0.0787 - acc: 0.9984 - val_loss: 0.1797 - val_acc: 0.9621
+
+Epoch 00006: val_loss improved from 0.24199 to 0.17966, saving model to saved_weights/resnet50_model.h5
+Epoch 7/20
+425/425 [==============================] - 621s 1s/step - loss: 0.0558 - acc: 0.9991 - val_loss: 0.2267 - val_acc: 0.9457
+
+Epoch 00007: val_loss did not improve from 0.17966
+Epoch 8/20
+425/425 [==============================] - 632s 1s/step - loss: 0.0395 - acc: 0.9994 - val_loss: 0.4773 - val_acc: 0.8924
+
+Epoch 00008: val_loss did not improve from 0.17966
+Epoch 9/20
+425/425 [==============================] - 625s 1s/step - loss: 0.0312 - acc: 0.9984 - val_loss: 0.2580 - val_acc: 0.9262
+
+Epoch 00009: val_loss did not improve from 0.17966
+Epoch 00009: early stopping
+```
+![](report_img/model_loss_48_0.png)
+**结论：**
+波动较大，尝试降低学习率重新训练
+
+**49. 49**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，增加l2正则化，去掉最顶层的偏置项参数，使用Adam优化器，调低学习率，给予衰减值，尝试防止过拟合，使用ModelCheckpoint回调函数保存训练过程中得到的最优模型
+
+**参数：**
+- 模型: ResNet50
+- epochs = 20
+- batch_size = 96
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 3
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.00002
+    - decay = 1e-8
+
+**结果：**
+```
+Epoch 1/20
+425/425 [==============================] - 639s 2s/step - loss: 0.8224 - acc: 0.8028 - val_loss: 0.3506 - val_acc: 0.9534
+
+Epoch 00001: val_loss improved from inf to 0.35056, saving model to saved_weights/resnet50_model.h5
+Epoch 2/20
+425/425 [==============================] - 628s 1s/step - loss: 0.2432 - acc: 0.9865 - val_loss: 0.3362 - val_acc: 0.9452
+
+Epoch 00002: val_loss improved from 0.35056 to 0.33622, saving model to saved_weights/resnet50_model.h5
+Epoch 3/20
+425/425 [==============================] - 625s 1s/step - loss: 0.2056 - acc: 0.9943 - val_loss: 0.3917 - val_acc: 0.9206
+
+Epoch 00003: val_loss did not improve from 0.33622
+Epoch 4/20
+425/425 [==============================] - 627s 1s/step - loss: 0.1866 - acc: 0.9966 - val_loss: 0.3413 - val_acc: 0.9395
+
+Epoch 00004: val_loss did not improve from 0.33622
+Epoch 5/20
+425/425 [==============================] - 630s 1s/step - loss: 0.1710 - acc: 0.9975 - val_loss: 0.2239 - val_acc: 0.9733
+
+Epoch 00005: val_loss improved from 0.33622 to 0.22392, saving model to saved_weights/resnet50_model.h5
+Epoch 6/20
+425/425 [==============================] - 631s 1s/step - loss: 0.1544 - acc: 0.9982 - val_loss: 0.2984 - val_acc: 0.9349
+
+Epoch 00006: val_loss did not improve from 0.22392
+Epoch 7/20
+425/425 [==============================] - 629s 1s/step - loss: 0.1371 - acc: 0.9988 - val_loss: 0.2692 - val_acc: 0.9498
+
+Epoch 00007: val_loss did not improve from 0.22392
+Epoch 8/20
+425/425 [==============================] - 627s 1s/step - loss: 0.1205 - acc: 0.9989 - val_loss: 0.2413 - val_acc: 0.9534
+
+Epoch 00008: val_loss did not improve from 0.22392
+Epoch 00008: early stopping
+```
+![](report_img/model_loss_49_0.png)
+**结论：**
+提交到kaggle中后得到成绩：private: 0.37406, public: 0.42121
+
+**50. 50**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，增加l2正则化，去掉最顶层的偏置项参数，使用Adam优化器，调低学习率，给予衰减值，尝试防止过拟合，使用ModelCheckpoint回调函数保存训练过程中得到的最优模型
+
+**参数：**
+- 模型: ResNet50
+- epochs = 20
+- batch_size = 96
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 3
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.0001
+    - decay = 1e-8
+
+**结果：**
+```
+
+```
+
+**结论：**
+
+
+
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
 你所用到的算法和技术执行的方式是否清晰记录了？
