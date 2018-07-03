@@ -2011,6 +2011,71 @@ Epoch 00016: early stopping
 **结论：**
 提交到kaggle中后得到成绩：private: 0.29843, public: 0.30522
 
+**52.52**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，增加l2正则化，去掉最顶层的偏置项参数，使用Adam优化器，调低学习率，给予衰减值，尝试防止过拟合，使用ModelCheckpoint回调函数保存训练过程中得到的最优模型
+
+**参数：**
+- 模型: ResNet50
+- epochs = 30
+- batch_size = 64
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 4
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.00003
+    - decay = 1e-8
+
+**结果：**
+```
+Epoch 1/30
+637/637 [==============================] - 1113s 2s/step - loss: 0.5850 - acc: 0.8769 - val_loss: 0.2496 - val_acc: 0.9795
+
+Epoch 00001: val_loss improved from inf to 0.24958, saving model to saved_weights/resnet50_model.h5
+Epoch 2/30
+637/637 [==============================] - 1090s 2s/step - loss: 0.2121 - acc: 0.9921 - val_loss: 0.3878 - val_acc: 0.9323
+
+Epoch 00002: val_loss did not improve from 0.24958
+Epoch 3/30
+637/637 [==============================] - 1090s 2s/step - loss: 0.1779 - acc: 0.9962 - val_loss: 0.3272 - val_acc: 0.9467
+
+Epoch 00003: val_loss did not improve from 0.24958
+Epoch 4/30
+637/637 [==============================] - 1090s 2s/step - loss: 0.1490 - acc: 0.9974 - val_loss: 0.1773 - val_acc: 0.9821
+
+Epoch 00004: val_loss improved from 0.24958 to 0.17732, saving model to saved_weights/resnet50_model.h5
+Epoch 5/30
+637/637 [==============================] - 1089s 2s/step - loss: 0.1223 - acc: 0.9976 - val_loss: 0.6165 - val_acc: 0.8980
+
+Epoch 00005: val_loss did not improve from 0.17732
+Epoch 6/30
+637/637 [==============================] - 1090s 2s/step - loss: 0.0926 - acc: 0.9989 - val_loss: 0.5809 - val_acc: 0.9088
+
+Epoch 00006: val_loss did not improve from 0.17732
+Epoch 7/30
+637/637 [==============================] - 1088s 2s/step - loss: 0.0697 - acc: 0.9987 - val_loss: 0.7969 - val_acc: 0.8760
+
+Epoch 00007: val_loss did not improve from 0.17732
+Epoch 8/30
+637/637 [==============================] - 1089s 2s/step - loss: 0.0511 - acc: 0.9986 - val_loss: 0.2161 - val_acc: 0.9359
+
+Epoch 00008: val_loss did not improve from 0.17732
+Epoch 00008: early stopping
+```
+![](report_img/model_loss_52_0.png)
+**结论：**
+提交到kaggle中后得到成绩：private: 0.37684, public: 0.37684
+
+
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
