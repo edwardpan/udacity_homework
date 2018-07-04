@@ -2075,6 +2075,85 @@ Epoch 00008: early stopping
 **结论：**
 提交到kaggle中后得到成绩：private: 0.37684, public: 0.37684
 
+**53.53**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，增加l2正则化，去掉最顶层的偏置项参数，使用Adam优化器，调低学习率，给予衰减值，尝试防止过拟合，使用ModelCheckpoint回调函数保存训练过程中得到的最优模型
+
+**参数：**
+- 模型: InceptionResNetV2
+- epochs = 20
+- batch_size = 32
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 4
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.00003
+    - decay = 1e-8
+
+**结果：**
+```
+Epoch 1/20
+1275/1275 [==============================] - 1883s 1s/step - loss: 0.4755 - acc: 0.9083 - val_loss: 0.3025 - val_acc: 0.9607
+
+Epoch 00001: val_loss improved from inf to 0.30252, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 2/20
+1275/1275 [==============================] - 1117s 876ms/step - loss: 0.1779 - acc: 0.9937 - val_loss: 0.2424 - val_acc: 0.9659
+
+Epoch 00002: val_loss improved from 0.30252 to 0.24240, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 3/20
+1275/1275 [==============================] - 1097s 861ms/step - loss: 0.1213 - acc: 0.9966 - val_loss: 0.2027 - val_acc: 0.9654
+
+Epoch 00003: val_loss improved from 0.24240 to 0.20272, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 4/20
+1275/1275 [==============================] - 1102s 864ms/step - loss: 0.0790 - acc: 0.9969 - val_loss: 0.1363 - val_acc: 0.9773
+
+Epoch 00004: val_loss improved from 0.20272 to 0.13631, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 5/20
+1275/1275 [==============================] - 1110s 870ms/step - loss: 0.0505 - acc: 0.9980 - val_loss: 0.1781 - val_acc: 0.9571
+
+Epoch 00005: val_loss did not improve from 0.13631
+Epoch 6/20
+1275/1275 [==============================] - 1108s 869ms/step - loss: 0.0394 - acc: 0.9976 - val_loss: 0.1473 - val_acc: 0.9680
+
+Epoch 00006: val_loss did not improve from 0.13631
+Epoch 7/20
+1275/1275 [==============================] - 1112s 872ms/step - loss: 0.0331 - acc: 0.9978 - val_loss: 0.1262 - val_acc: 0.9747
+
+Epoch 00007: val_loss improved from 0.13631 to 0.12615, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 8/20
+1275/1275 [==============================] - 1105s 867ms/step - loss: 0.0267 - acc: 0.9986 - val_loss: 0.1077 - val_acc: 0.9731
+
+Epoch 00008: val_loss improved from 0.12615 to 0.10774, saving model to saved_weights/inception_resnet_v2_model.h5
+Epoch 9/20
+1275/1275 [==============================] - 1093s 857ms/step - loss: 0.0261 - acc: 0.9981 - val_loss: 0.2314 - val_acc: 0.9659
+
+Epoch 00009: val_loss did not improve from 0.10774
+Epoch 10/20
+1275/1275 [==============================] - 1106s 868ms/step - loss: 0.0225 - acc: 0.9987 - val_loss: 0.2403 - val_acc: 0.9654
+
+Epoch 00010: val_loss did not improve from 0.10774
+Epoch 11/20
+1275/1275 [==============================] - 1109s 870ms/step - loss: 0.0214 - acc: 0.9985 - val_loss: 0.1655 - val_acc: 0.9659
+
+Epoch 00011: val_loss did not improve from 0.10774
+Epoch 12/20
+1275/1275 [==============================] - 1114s 874ms/step - loss: 0.0211 - acc: 0.9985 - val_loss: 0.2252 - val_acc: 0.9514
+
+Epoch 00012: val_loss did not improve from 0.10774
+Epoch 00012: early stopping
+```
+![](report_img/model_loss_53_0.png)
+**结论：**
+提交到kaggle中后得到成绩：private:  0.32819, public: 0.43092
 
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
