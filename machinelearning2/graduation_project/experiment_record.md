@@ -2343,6 +2343,82 @@ Epoch 00013: early stopping
 **结论：**
 提交到kaggle中后得到成绩：private:  0.30469, public: 0.35846
 
+**56.56**
+**说明：**
+使用了imgaug库对图像进行了增强处理，为每一张图片的右半都随机与同分类图片拼接，因此实际的训练数据集为原来的2倍，增加l2正则化，去掉最顶层的偏置项参数，使用Adam优化器，调低学习率，给予衰减值，尝试防止过拟合，使用ModelCheckpoint回调函数保存训练过程中得到的最优模型
+
+**参数：**
+- 模型: DenseNet201
+- epochs = 20
+- batch_size = 32
+- 锁层: NO
+- 数据增强：imgaug+ImageDataGenerator
+- 停止提升参数:
+  - val_loss: 0.0005
+  - 轮数(patience): 3
+- 自定义层:
+  ```
+  x = GlobalAveragePooling2D()(x)
+  x = Dropout(0.5)(x)
+  predictions = Dense(10, activation='softmax', use_bias=False, kernel_regularizer=l2(0.01))(x)
+  ```
+- 优化器:
+  - Adam:
+    - lr = 0.00003
+    - decay = 1e-8
+
+**结果：**
+```
+Epoch 1/20
+1291/1291 [==============================] - 1259s 975ms/step - loss: 0.3827 - acc: 0.9237 - val_loss: 0.1857 - val_acc: 0.9798
+
+Epoch 00001: val_loss improved from inf to 0.18573, saving model to saved_weights/densenet201_model.h5
+Epoch 2/20
+1291/1291 [==============================] - 696s 539ms/step - loss: 0.1013 - acc: 0.9952 - val_loss: 0.1194 - val_acc: 0.9899
+
+Epoch 00002: val_loss improved from 0.18573 to 0.11942, saving model to saved_weights/densenet201_model.h5
+Epoch 3/20
+1291/1291 [==============================] - 698s 541ms/step - loss: 0.0759 - acc: 0.9973 - val_loss: 0.1076 - val_acc: 0.9881
+
+Epoch 00003: val_loss improved from 0.11942 to 0.10760, saving model to saved_weights/densenet201_model.h5
+Epoch 4/20
+1291/1291 [==============================] - 689s 534ms/step - loss: 0.0568 - acc: 0.9982 - val_loss: 0.1337 - val_acc: 0.9768
+
+Epoch 00004: val_loss did not improve from 0.10760
+Epoch 5/20
+1291/1291 [==============================] - 687s 532ms/step - loss: 0.0428 - acc: 0.9983 - val_loss: 0.1174 - val_acc: 0.9649
+
+Epoch 00005: val_loss did not improve from 0.10760
+Epoch 6/20
+1291/1291 [==============================] - 700s 542ms/step - loss: 0.0313 - acc: 0.9990 - val_loss: 0.0725 - val_acc: 0.9887
+
+Epoch 00006: val_loss improved from 0.10760 to 0.07249, saving model to saved_weights/densenet201_model.h5
+Epoch 7/20
+1291/1291 [==============================] - 707s 548ms/step - loss: 0.0248 - acc: 0.9991 - val_loss: 0.0552 - val_acc: 0.9941
+
+Epoch 00007: val_loss improved from 0.07249 to 0.05516, saving model to saved_weights/densenet201_model.h5
+Epoch 8/20
+1291/1291 [==============================] - 680s 526ms/step - loss: 0.0206 - acc: 0.9991 - val_loss: 0.0540 - val_acc: 0.9923
+
+Epoch 00008: val_loss improved from 0.05516 to 0.05397, saving model to saved_weights/densenet201_model.h5
+Epoch 9/20
+1291/1291 [==============================] - 687s 532ms/step - loss: 0.0180 - acc: 0.9992 - val_loss: 0.0577 - val_acc: 0.9899
+
+Epoch 00009: val_loss did not improve from 0.05397
+Epoch 10/20
+1291/1291 [==============================] - 690s 534ms/step - loss: 0.0155 - acc: 0.9992 - val_loss: 0.0565 - val_acc: 0.9893
+
+Epoch 00010: val_loss did not improve from 0.05397
+Epoch 11/20
+1291/1291 [==============================] - 671s 520ms/step - loss: 0.0153 - acc: 0.9991 - val_loss: 0.0632 - val_acc: 0.9875
+
+Epoch 00011: val_loss did not improve from 0.05397
+Epoch 00011: early stopping
+```
+![](report_img/model_loss_56_0.png)
+**结论：**
+提交到kaggle中后得到成绩：private: 0.28420, public: 0.30792
+
 
 在这一部分， 你需要描述你所建立的模型在给定数据上执行过程。模型的执行过程，以及过程中遇到的困难的描述应该清晰明了地记录和描述。需要考虑的问题：
 
