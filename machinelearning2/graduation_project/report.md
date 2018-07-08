@@ -10,7 +10,7 @@
 
 早期驾驶员状态检测方法主要是基于车辆运行状态的检测方法，包括车道偏离报警、转向盘检测等，对驾驶员本身的特征敏感度不高，容易因环境因素误判，也不能从根本上解决驾驶员状态检测的问题，而近年的基于深度学习的图像识别技术则提供了不错的解决办法，可以通过对视频图像进行分析检测驾驶员当前的状态并给予提醒，甚至在出现更严重的危险情况时通过车辆控制信号及时主动刹停汽车。
 
-项目使用的相关数据及评分规则均来于二年前的Kaggle比赛，当年一共有1440名参赛队伍参于该赛事。项目地址：![state-farm-distracted-driver-detection](https://www.kaggle.com/c/state-farm-distracted-driver-detection)
+项目使用的相关数据及评分规则均来于二年前的Kaggle比赛，当年一共有1440名参赛队伍参于该赛事。项目地址：[state-farm-distracted-driver-detection](https://www.kaggle.com/c/state-farm-distracted-driver-detection)
 ### 问题陈述
 处理通过车载摄像头记录到的驾驶员状态图像，对图像进行识别处理，分析图像中驾驶员当前所处的状态，以满足对安全驾驶提醒的需求。需要从图像中识别包括如下的驾驶员状态：
 0. 安全驾驶
@@ -83,23 +83,108 @@ Keras是一个高层神经网络API，基于tensorflow、Theano以及CNTK后端�
 
 项目将尝试使用Keras中的ImageDataGenerator对训练的图像数据做增强处理。
 #### InceptionV3
+InceptionNet模型架构首次出现在ILSVRC2014的比赛中，由Google开发，以较大优势取得了当年的第一名，当前为InceptionV1，而InceptionV3则为它的后期改进版本。InceptionV3拥有比AlexNet和VGG19更大的网络，但其计算量只有15亿次浮点运算，同时只有500万的参数量，准确率却大大胜于AlexNet和VGG19。拥有着计算量小、模型训练快、分类准确的特点。
 
-#### Xception
+InceptionNet内部多处使用InceptionModule，总共拥有3种，共10个InceptionModule，多个小的网络反复使用一起堆叠成了一个大的神经网络。
+![](report_img/inceptionv3_net.png)
+第一种Module使用了两个3\*3卷积替代了之前版本的5\*5卷积，减小了计算量，但可以达到同样的效果。
+![](report_img/inceptionv3_module1.png)
+第二种Module
+![](report_img/inceptionv3_module2.png)
+第三种Module
+![](report_img/inceptionv3_module3.png)
 
+每一个InceptionModule都会分为4个或更多的分支来进行不同的卷积处理，以便学习数据的更多形态，再进行融合。
+
+InceptionNet在V2版本时还提出了Batch Normalization方法，是一个非常有效的正则化方法，可以让大型卷积网络的训练速度加快很多倍，同时收敛后的分类准确率也可以得到大幅提高。
+
+BN在用于神经网络某层时，会对每一个mini-batch数据的内部进行标准化（normalization）处理，使输出规范化到N(0,1)的正态分布。传统的深度神经网络在训练时，每一层的输入的分布都在变化，导致训练变得困难，我们只能使用一个很小的学习速率解决这个问题。而对每一层使用BN之后，我们就可以有效地解决这个问题，学习速率可以增大很多倍，达到之前的准确率所需要的迭代次数只有1/14，训练时间大大缩短。
 #### ResNet50
+ResNet（Residual Neural Network）由微软研究院的Kaiming He等4名华人提出，通过使用Residual Unit成功训练152层深的神经网络，在ILSVRC 2015比赛中获得了冠军，取得3.57%的top-5错误率，同时参数量却比VGGNet低，效果非常突出。
 
-#### InceptionResNetV2
+ResNet的结构可以极快地加速超深神经网络的训练，模型的准确率也有非常大的提升。
 
-#### DenseNet201
+ResNet最初的灵感出自这个问题：在不断加神经网络的深度时，会出现一个Degradation的问题，即准确率会先上升然后达到饱和，再持续增加深度则会导致准确率下降。
 
+这并不是过拟合的问题，因为不光在测试集上误差增大，训练集本身误差也会增大。假设有一个比较浅的网络达到了饱和的准确率，那么后面再加上几个的全等映射层，起码误差不会增加，即更深的网络不应该带来训练集上误差上升。
+
+而这里提到的使用全等映射直接将前一层输出传到后面的思想，就是ResNet的灵感来源。假定某段神经网络的输入是x，期望输出是H(x)，如果我们直接把输入x传到输出作为初始结果，那么此时我们需要学习的目标就是F(x)=H(x)-x。
+![](report_img/resnet_1.png)
+这就是一个ResNet的残差学习单元（Residual Unit），ResNet相当于将学习目标改变了，不再是学习一个完整的输出H(x)，只是输出和输入的差别H(x)-x，即残差。
+![](report_img/resnet_2.png)
+ResNet有很多旁路的支线将输入直接连到后面的层，使得后面的层可以直接学习残差
+
+传统的卷积层或全连接层在信息传递时，或多或少会存在信息丢失、损耗等问题。ResNet在某种程度上解决了这个问题，通过直接将输入信息绕道传到输出，保护信息的完整性，整个网络则只需要学习输入、输出差别的那一部分，简化学习目标和难度。
+#### InceptionResNet
+InceptionResNet（也可以叫InceptionV4）网络也是由Google发布，由InceptionV3借助ResNet残差网络思想演变而来。
+![](report_img/inceptionresnet_1.png)
+以下为InceptionResNetV2网络中使用的其中一个模块，可以看到有一个从模块开始直接到结束的线路，应用了ResNet中的残差网络思想
+![](report_img/inceptionresnet_2.png)
+这是另一个使用了残差网络思想的模块，该模块为上图中的Inception-resnet-B模块
+![](report_img/inceptionresnet_3.png)
+#### Xception
+Xception也是由Google发布的深度神经网络架构。公开于2017年4月
+
+Inception模块是一大类在ImageNet上取得顶尖结果的模型的基本模块，例如GoogLeNet、Inception V2/V3和Inception-ResNet。有别于VGG等传统的网络通过堆叠简单的3*3卷积实现特征提取，Inception模块通过组合1\*1，3\*3，5\*5和pooling等结构，用更少的参数和更少的计算开销可以学习到更丰富的特征表示。
+
+通常，在一组特征图上进行卷积需要三维的卷积核，也即卷积核需要同时学习空间上的相关性和通道间的相关性。将这两种相关性显式地分离开来，是Inception模块的思想之一：Inception模块首先使用1\*1的卷积核将特征图的各个通道映射到一个新的空间，在这一过程中学习通道间的相关性；再通过常规的3\*3或5\*5的卷积核进行卷积，以同时学习空间上的相关性和通道间的相关性。
+
+但此时，通道间的相关性和空间相关性仍旧没有完全分离，也即3\*3或5\*5的卷积核仍然是多通道输入的，那么是否可以假设它们可以被完全分离？显然，当所有3\*3或5\*5的卷积都作用在只有一个通道的特征图上时，通道间的相关性和空间上的相关性即达到了完全分离的效果。
+
+若将Inception模块简化，仅保留包含3\*3的卷积的分支：
+![](report_img/xception_1.png)
+再将所有1\*1的卷积进行拼接：
+![](report_img/xception_2.png)
+进一步增多3\*3的卷积的分支的数量，使它与1\*1的卷积的输出通道数相等：
+![](report_img/xception_3.png)
+此时每个3\*3的卷积即作用于仅包含一个通道的特征图上，作者称之为“极致的Inception（Extream Inception）”模块，这就是Xception的基本模块。事实上，调节每个3\*3的卷积作用的特征图的通道数，即调节3\*3的卷积的分支的数量与1\*1的卷积的输出通道数的比例，可以实现一系列处于传统Inception模块和“极致的Inception”模块之间的状态。
+
+Xception网络则由这些“极致的Inception”模块构成，以下是结构图：
+![](report_img/xception_4.png)
+数据将先经过Entry flow区，再经过Middel flow区并在该区域重复执行8次，最后经过Exit flow。其中所有的卷积层及分离卷积层后面都使用了Batch Normalization方法。
+#### DenseNet
+DenseNet发布于2017年，是CVPR 2017 Best Paper。DenseNet中的DenseBlock的一个重要思想就是对前每一层都增加一个单独的shortcut，使得任意两层网络都可以直接“沟通”，也是参考了ResNet的残差网络思想，但使用的更多、更广，不过由此带来的代价就是训练时占用的显存更多。
+
+DenseNet和ResNet的一个明显区别是，ResNet是求和，而DenseNet是做一个拼接，每一层网络的输入包括前面所有层网络的输出。第L层的输入等于$k\times(L-1)+k_0$，其中k是生长率，表示每一层的通道数，比如下图网络的通道数为4。
+
+DenseNet提升了信息和梯度在网络中的传输效率，每层都能直接从损失函数拿到梯度，并且直接得到输入信号，这样就能训练更深的网络，这种网络结构还有正则化的效果。其他网络致力于从深度和宽度来提升网络性能，
+DenseNet致力于从特征重用的角度来提升网络性能
+![](report_img/densenet_1.png)
+这种结构的好处是可以缓解梯度消失，省参数省计算，特征重用可以起到抗过拟合的作用。达到相同的精度，dense net只需要res net一半的参数和一半的计算量。
+
+下图是一个完整的DenseNet网络结构，其中有3个DenseBlock：
+![](report_img/densenet_2.png)
 #### SGD
-
+随机梯度下降优化器。和 BGD 的一次用所有数据计算梯度相比，SGD 每次更新时对每个样本进行梯度更新。对于很大的数据集来说，可能会有相似的样本，这样 BGD 在计算梯度时会出现冗余， 而 SGD 一次只进行一次更新，就没有冗余，而且比较快，并且可以新增样本。
+$$
+\theta = \theta - \eta \cdot \nabla_\theta J( \theta; x^{(i)}; y^{(i)})
+$$
+但是 SGD 因为更新比较频繁，会造成 cost function 有严重的震荡。
+![](report_img/sgd_1.png)
 #### Adam
-
-#### Fine-tune
-
-####
-
+这个算法是另一种计算每个参数的自适应学习率的方法。存储了过去梯度的平方$v_t$的指数衰减平均值 ，也保持了过去梯度$m_t$的指数衰减平均值：
+$$
+\begin{align}
+\begin{split}
+m_t &= \beta_1 m_{t-1} + (1 - \beta_1) g_t \\  
+v_t &= \beta_2 v_{t-1} + (1 - \beta_2) g_t^2  
+\end{split}
+\end{align}
+$$
+如果$m_t$和$v_t$被初始化为0向量，那它们就会向0偏置，所以做了偏差校正，通过计算偏差校正后的$m_t$和$v_t$来抵消这些偏差：
+$$
+\begin{align}
+\begin{split}
+\hat{m}_t &= \dfrac{m_t}{1 - \beta^t_1} \\
+\hat{v}_t &= \dfrac{v_t}{1 - \beta^t_2} \end{split}
+\end{align}
+$$
+然后使用这些变量来更新学习参数：
+$$
+\theta_{t+1} = \theta_{t} - \dfrac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
+$$
+实践表明，Adam比SGD优化方法效果更好，学习速度更快，也不像SGD容易受鞍点影响导致停留在局部极小值。
+![](report_img/adam_1.png)
 ### 基准模型
 使用Kaggle中该项目的排名分数做为基准模型。使用前10%的分数作为基准，第144名，最小损失值为0.25634。
 ## III. 方法
@@ -157,8 +242,7 @@ link images to directory data/imgs/val2
 split valid data done!
 ```
 #### 使用clip来防止logloss分数过高
-
-
+这里用到了一个小技巧，将每个预测结果的值限制到[0.005, 0.995]这个区间，因为kaggle的评估标准是LogLoss，当值很小时$log$的结果相差非常大，$log(0) \approx -\infty，$log(0.005)=-5.30$，而$log(0.995)=-0.005$和$log(1) = 0$相差也不大，处理后对kaggle评分有一定好处。
 #### 使用InceptionV3模型训练
 这里使用Keras框架中的InceptionV3模型训练，并使用imagenet的预训练权重。具体实现代码：inceptionv3.ipynb
 **1. 未使用拼接图像的模型训练**
@@ -186,6 +270,10 @@ SGD优化器学习率降为0.0002，衰减为20e-8，排除了全连接层的偏
 loss: 0.0148 - acc: 0.9993 - val_loss: 0.0248 - val_acc: 0.9959
 
 使用该模型对测试集进行预测后得到分数：private: 0.28068, public: 0.31967。经过多次尝试后发现该参数训练出的模型得出的分数是最优的，因此最终采用了该模型。
+
+预测效果查看：
+![](report_img/pred_inceptionv3.png)
+
 #### 使用Xception模型训练
 这里使用Keras框架中的Xception模型训练，并使用imagenet的预训练权重。具体实现代码：xception.ipynb
 
@@ -199,6 +287,10 @@ loss: 0.0148 - acc: 0.9993 - val_loss: 0.0248 - val_acc: 0.9959
 最优训练结果：loss: 0.0254 - acc: 0.9990 - val_loss: 0.0410 - val_acc: 0.9931
 
 提交到kaggle中后得到成绩：private:  0.30469, public: 0.35846
+
+预测效果查看：
+![](report_img/pred_xception.png)
+
 #### 使用InceptionResNetV2模型训练
 这里使用Keras框架中的InceptionResNetV2模型训练，并使用imagenet的预训练权重。具体实现代码：InceptionResNetV2.ipynb
 
@@ -212,6 +304,10 @@ loss: 0.0148 - acc: 0.9993 - val_loss: 0.0248 - val_acc: 0.9959
 最优训练结果：loss: 0.0267 - acc: 0.9986 - val_loss: 0.1077 - val_acc: 0.9731
 
 提交到kaggle中后得到成绩：private: 0.32819, public: 0.43092
+
+预测效果查看：
+![](report_img/pred_inceptionresnetv2.png)
+
 #### 使用ResNet50模型训练
 这里使用Keras框架中的ResNet50模型训练，并使用imagenet的预训练权重。具体实现代码：resnet50.ipynb
 
@@ -225,6 +321,10 @@ loss: 0.0148 - acc: 0.9993 - val_loss: 0.0248 - val_acc: 0.9959
 最优训练结果：loss: 0.2102 - acc: 0.9933 - val_loss: 0.2963 - val_acc: 0.9575
 
 提交到kaggle中后得到成绩：private: 0.37406, public: 0.42121
+
+预测效果查看：
+![](report_img/pred_resnet50.png)
+
 #### 使用DenseNet201
 这里使用Keras框架中的DenseNet201模型训练，并使用imagenet的预训练权重。具体实现代码：densenet201.ipynb
 
@@ -238,6 +338,10 @@ loss: 0.0148 - acc: 0.9993 - val_loss: 0.0248 - val_acc: 0.9959
 最优训练结果：loss: 0.0206 - acc: 0.9991 - val_loss: 0.0540 - val_acc: 0.9923
 
 提交到kaggle中后得到成绩：private: 0.28420, public: 0.30792
+
+预测效果查看：
+![](report_img/pred_densenet201.png)
+
 #### 模型融合
 以上每一个模型在kaggle中的分数都在0.28以上，离我们设定的0.25的目标还有一段距离。决定使用模型融合的技术来继续降低该loss分数。模型融合类似于多个模型对它们的预测结果进行投票选举，通过该选举选出测试集中每张图片的最优预测结果，达到进一步提升模型准确度的目的。
 
@@ -264,38 +368,23 @@ loss: 0.0089 - acc: 0.9999 - val_loss: 0.0050 - val_acc: 1.0000
 kaggle的private分数达到了0.22399的好成绩，在kaggle的排名表中可以排在第95名，也达到了最初设定的基准。
 
 ## IV. 项目结论
-### 结果可视化
-在这一部分，你需要用可视化的方式展示项目中需要强调的重要技术特性。至于什么形式，你可以自由把握，但需要表达出一个关于这个项目重要的结论和特点，并对此作出讨论。一些需要考虑的：
-
-你是否对一个与问题，数据集，输入数据，或结果相关的，重要的技术特性进行了可视化？
-可视化结果是否详尽的分析讨论了？
-绘图的坐标轴，标题，基准面是不是清晰定义了？
 ### 对项目的思考
-在这一部分，你需要从头到尾总结一下整个问题的解决方案，讨论其中你认为有趣或困难的地方。从整体来反思一下整个项目，确保自己对整个流程是明确掌握的。需要考虑：
+由于该项目的数据源是来自于视频截图，存在许多大致重复的图像，且测试集中的图像数据大大超过训练集中的图像数据，因此该项目的主要难度就是防止过拟合。我在项目的初期常试了许多防止过拟合的手段，包括：降低学习率、增加Dropout丢弃率、去掉全连接层偏置参数、L2正则化、图像旋转翻转等数据增强，都能获得一些效果，但始终离期望的效果太远。后来吸取了原参赛者分享的经验，使用了图像拼接的数据增强手段后，效果大大提升，成绩终于有所突破。最终提交到kaggle的分数结果是令人满意的，甚至有点点超出原来的期望的目标。
 
-你是否详尽总结了项目的整个流程？
-项目里有哪些比较有意思的地方？
-项目里有哪些比较困难的地方？
-最终模型和结果是否符合你对这个问题的期望？它可以在通用的场景下解决这些类型的问题吗？
+且其中训练集是由26个司机的图像组成的，存在一些特殊性，如果没有观察到该特殊性，则在划分验证集时将会出现问题，导致验证分数异常地高，而提交到kaggle的分数却会很低。
+
+由上综诉认为，在对模型进行训练时对数据集的观察和分析非常重要。数据集的大小、特性、处理方式都对模型训练产生着很大的影响。
 ### 需要作出的改进
-在这一部分，你需要讨论你可以怎么样去完善你执行流程中的某一方面。例如考虑一下你的操作的方法是否可以进一步推广，泛化，有没有需要作出变更的地方。你并不需要确实作出这些改进，不过你应能够讨论这些改进可能对结果的影响，并与现有结果进行比较。一些需要考虑的问题：
+后期我认为还可以继续使用图像拼接的方式丰富训练集，还可以对训练集的图像进行更细致的分析和数据增强，但这都需要耗费更多的时间。
 
-是否可以有算法和技术层面的进一步的完善？
-是否有一些你了解到，但是你还没能够实践的算法和技术？
-如果将你最终模型作为新的基准，你认为还能有更好的解决方案吗？
-
+另外也可以使用更多的模型来训练，这样可以有更多的模型做模型融合，俗话说人多力量大嘛，模型也是如此，有更多的优秀模型来参于“投票”，融合模型的预测结果也将更准确。
 ## 参考文献
 [1]Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, Zbigniew Wojna. [
 Rethinking the Inception Architecture for Computer Vision](https://arxiv.org/pdf/1512.00567). arXiv:1512.00567, 2015.
 [2]François Chollet. [Xception: Deep Learning with Depthwise Separable Convolutions](https://arxiv.org/pdf/1610.02357). arXiv prepr int arXiv:1610.02357, 2016.
-[3]黄文坚. [CNN浅析和历年ImageNet冠军模型解析](http://www.infoq.com/cn/articles/cnn-and-imagenet-champion-model-analysis). 发表时间: 2017年5月22日.
-[4]Kaggle. [State Farm Distracted Driver Detection](https://www.kaggle.com/c/state-farm-distracted-driver-detection). 2016.
-
-**在提交之前， 问一下自己...**
-- 你所写的项目报告结构对比于这个模板而言足够清晰了没有？
-- 每一个部分（尤其分析和方法）是否清晰，简洁，明了？有没有存在歧义的术语和用语需要进一步说明的？
-- 你的目标读者是不是能够明白你的分析，方法和结果？
-- 报告里面是否有语法错误或拼写错误？
-- 报告里提到的一些外部资料及来源是不是都正确引述或引用了？
-- 代码可读性是否良好？必要的注释是否加上了？
-- 代码是否可以顺利运行并重现跟报告相似的结果？
+[3]Christian Szegedy, Sergey Ioffe, Vincent Vanhoucke, Alex Alemi. [Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning](https://arxiv.org/pdf/1602.07261). arXiv prepr int arXiv:1602.07261, 2016.
+[4]Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun. [Deep Residual Learning for Image Recognition](https://arxiv.org/pdf/1512.03385). arXiv prepr int arXiv:1512.03385, 2015.
+[5]Gao Huang, Zhuang Liu, Laurens van der Maaten, Kilian Q. Weinberger. [Densely Connected Convolutional Networks](https://arxiv.org/pdf/1608.06993). arXiv prepr int arXiv:1608.06993v5. 2016.
+[6]黄文坚. [CNN浅析和历年ImageNet冠军模型解析](http://www.infoq.com/cn/articles/cnn-and-imagenet-champion-model-analysis). 发表时间: 2017年5月22日.
+[7]Kaggle. [State Farm Distracted Driver Detection](https://www.kaggle.com/c/state-farm-distracted-driver-detection). 2016.
+[8]Sebastian Ruder. [An overview of gradient descent optimization algorithms](http://ruder.io/optimizing-gradient-descent/index.html#adam). 19 Jan 2016.
