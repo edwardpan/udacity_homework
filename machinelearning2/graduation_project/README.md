@@ -16,7 +16,7 @@
   - sample_submission.csv
 - saved_weights
 
-在requirements文件夹中有环境文件driver-ubuntu.yml
+在requirements文件夹中有环境文件driver-ubuntu.yml，在ubuntu系统中使用命令`conda create -f requiremens/driver-ubuntu.yml`创建环境，并使用`source activate tensorflow_p36`进入环境
 
 ## 代码说明及大致运行时间
 以下估计运行时间基于AWS中的p3.2xlarge服务器
