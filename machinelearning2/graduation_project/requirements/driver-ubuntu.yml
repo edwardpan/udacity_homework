@@ -169,6 +169,7 @@ dependencies:
     - pbr==4.0.4
     - psycopg2==2.7.4
     - py4j==0.10.4
+    - pydot==1.2.4
     - pygal==2.4.0
     - pyspark==2.2.1
     - pywavelets==0.5.2
