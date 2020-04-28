@@ -12,13 +12,13 @@ from aliyunsdkalidns.request.v20150109 import UpdateDomainRecordRequest, Describ
 from aliyunsdkcore import client
 
 #请填写你的Access Key ID
-access_key_id = 'LTAIfsDqPb8s8hkr'
+access_key_id = ''
 
 #请填写你的Access Key Secret
-access_Key_secret = 'huF0L62ziUVIj2BMUtS9Ci6Ppqsjc4'
+access_Key_secret = ''
 
 #请填写你的账号ID
-account_id = '206923427581137465'
+account_id = ''
 
 #请填写你的一级域名
 rc_domain = 'ipan.site'
@@ -30,7 +30,7 @@ rc_rr = 'notebook'
 rc_type = 'A'
 
 #请填写解析记录ID(可以先check_records()获取ID再填写这里)
-rc_record_id = '3911627362796544'
+rc_record_id = ''
 
 #请填写解析有效生存时间TTL，单位：秒
 rc_ttl = '600'
